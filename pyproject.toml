@@ -15,3 +15,13 @@ dependencies = [
 [tool.setuptools]
 py-modules = []
 packages = []
+
+[bdist_wheel]
+universal = 0
+
+[tool.poetry]
+build = false
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
