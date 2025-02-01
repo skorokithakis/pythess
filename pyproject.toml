@@ -19,11 +19,8 @@ dependencies = [
 py-modules = []
 packages = []
 
-[bdist_wheel]
-universal = 0
-
 [tool.poetry]
-build = false
+package-mode = false
 
 [build-system]
 requires = ["setuptools"]
