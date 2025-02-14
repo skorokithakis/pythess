@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+<div class="clearfix">
+    <div class="main-content">
+        <!-- Next Meetup Section -->
+        <section id="next-meetup">
+            <h2>Next Meetup</h2>
+            <p><strong>Title:</strong> Python for Data Science</p>
+            <p><strong>Date & Time:</strong> May 15, 2024, 6:00 PM</p>
+            <p><strong>Location:</strong> Meetup.com HQ</p>
+            <p><strong>Description:</strong> Join us for an engaging discussion analyzing Python's role in data science and its powerful libraries!</p>
+            <a class="cta-button" href="https://meetup.com" target="_blank">Learn More on Meetup.com</a>
+        </section>
+
+        <!-- Calls To Action Section -->
+        <section id="calls-to-action">
+            <h2>Join Our Community</h2>
+            <p>Be a part of our vibrant community that meets regularly to dive into Python topics.</p>
+            <p>
+                <a class="cta-button" href="https://discord.gg/yourinvitecode" target="_blank">Join our Discord</a>
+                <a class="cta-button" href="https://meetup.com" target="_blank">Join our Meetup.com Community</a>
+            </p>
+        </section>
+    </div>
+
+    <!-- Sidebar for Past Meetups -->
+    <aside class="sidebar">
+        <h3>Past Meetups</h3>
+        <ul>
+            <li>May 24, 2023 - Python for Web Development</li>
+            <li>April 10, 2023 - Data Wrangling with Python</li>
+            <li>March 15, 2023 - Machine Learning Demystified</li>
+        </ul>
+    </aside>
+</div>
+{% endblock %}
