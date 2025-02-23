@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,7 +25,7 @@ SECRET_KEY = "django-insecure-bjkc3tcc9l-+@=_u(50(vimo6zxpdk4o6#xmzyobxp9zkt8t@6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = []  # type: ignore
 
 
 # Application definition
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "django_distill",
+    "markdownify.apps.MarkdownifyConfig",
     "main",
 ]
 
@@ -105,13 +107,41 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "el"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Athens"
 
 USE_I18N = True
 
 USE_TZ = True
+
+MARKDOWNIFY = {
+    "default": {
+        "WHITELIST_TAGS": [
+            "a",
+            "p",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "ul",
+            "ol",
+            "li",
+            "blockquote",
+            "code",
+            "pre",
+            "em",
+            "strong",
+            "i",
+            "b",
+            "u",
+            "s",
+            "br",
+        ],
+    },
+}
 
 
 # Static files (CSS, JavaScript, Images)

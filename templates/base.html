@@ -1,167 +1,224 @@
-{% load static %}
+{% load static markdownify %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Home{% endblock title %} - PyThess meetup</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Καλησπέρα{% endblock %} - PyThess</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "python-blue": "#306998",
+              "python-yellow": "#FFD43B",
+            },
+          },
+        },
+      };
+    </script>
     <style>
-        /* Import modern font */
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+      @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");
 
-        /* Reset & Basics */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Roboto', sans-serif; line-height: 1.6; color: #333; background: #eef2f3; }
-
-        /* Header styling */
-        header {
-            background: #607d8b;  /* A darker, blue-gray tone for improved contrast */
-            color: white;
-            padding: 30px 20px;
-            text-align: center;
-        }
-        header img { max-height: 80px; }
-
-        /* Branding styling */
-        .branding {
-            display: inline-flex;
-            align-items: center;
-            gap: 20px;
-        }
-        .branding-text h1 {
-            font-size: 2em;
-            margin: 0;
-            color: inherit; /* Inherits header's white color */
-        }
-        .branding-text p {
-            margin: 0;
-            font-size: 0.9em;
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.2;
-        }
-
-        /* Navigation styling */
-        nav {
-            margin: 20px 0;
-            text-align: center;
-        }
-        nav a {
-            display: inline-block;
-            padding: 10px 20px;
-            color: #646464;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: background-color 0.3s, color 0.3s;
-            margin: 0 10px;
-        }
-        nav a:hover {
-            background-color: #d3d3d3;  /* A light, subdued gray */
-            color: #fff;
-        }
-
-        /* Container layout */
-        .container { width: 90%; max-width: 1200px; margin: auto; padding: 20px 0; }
-        section { margin-bottom: 40px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-
-        /* Footer styling */
-        footer {
-            background: #607d8b;  /* Matching the header's darker tone */
-            color: #fff;
-            text-align: center;
-            padding: 15px 0;
-            font-size: 0.9em;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            header, footer { padding: 15px; }
-            nav a { display: block; margin: 10px 0; }
-        }
-
-        /* Call-to-action button styling */
-        .cta-button {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-top: 10px;
-            background-color: #f3eac3;  /* Muted, subtle yellow */
-            color: #2d4059;  /* Muted, dark blue for contrast */
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: 700;
-            transition: background-color 0.3s;
-        }
-        .cta-button:hover {
-            background-color: #f2e3a2;  /* Slightly different subtle yellow */
-        }
-
-        /* Layout for main content and sidebar */
-        .main-content {
-            width: 70%;
-            float: left;
-            padding: 20px;
-        }
-        .sidebar {
-            width: 25%;
-            float: right;
-            background: #fefbf6;  /* A very light, subtle warm tone */
-            padding: 20px;
-            border-radius: 8px;
-        }
-
-        /* Clear floats */
-        .clearfix::after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        /* Responsive adjustments for layout */
-        @media (max-width: 768px) {
-            .main-content,
-            .sidebar {
-                width: 100%;
-                float: none;
-                margin-bottom: 20px;
-            }
-        }
+      /* Only style text links, excluding those that have a background (for buttons) */
+      section p a {
+        color: #306998 !important;
+        text-decoration: underline !important;
+      }
     </style>
-    {% block extra_styles %}{% endblock %}
-</head>
-<body>
-    <header>
-        <div class="container">
-            <div class="branding">
-                <img src="{% static 'images/logo.png' %}" alt="PyThess Logo">
-                <div class="branding-text">
-                    <h1>PyThess</h1>
-                    <p>a serious meetup</p>
-                </div>
-            </div>
-        </div>
+  </head>
+  <body class="bg-gray-50 text-gray-900 font-['Inter',sans-serif]">
+    <header class="bg-python-blue text-white shadow-md">
+      <nav
+        class="container mx-auto px-4 py-4 flex justify-between items-center"
+      >
+        <a href="/" class="text-2xl font-bold">
+          Py<span class="text-python-yellow">Thess</span></a
+        >
+        <ul class="flex space-x-6">
+          <li>
+            <a href="#about" class="hover:text-python-yellow transition-colors"
+              >About</a
+            >
+          </li>
+          <li>
+            <a
+              href="#next-meetup"
+              class="hover:text-python-yellow transition-colors"
+              >Next Meetup</a
+            >
+          </li>
+          <li>
+            <a
+              href="#past-meetups"
+              class="hover:text-python-yellow transition-colors"
+              >Past Meetups</a
+            >
+          </li>
+          <li>
+            <a
+              href="#testimonials"
+              class="hover:text-python-yellow transition-colors"
+              >Testimonials</a
+            >
+          </li>
+          <li>
+            <a
+              href="#contact"
+              class="hover:text-python-yellow transition-colors"
+              >Contact</a
+            >
+          </li>
+        </ul>
+      </nav>
     </header>
 
-    <div class="container">
-        <!-- Navigation -->
-        <nav>
-            <a href="{% url 'index' %}">Home</a>
-            <a href="#">Upcoming Meetups</a>
-            <a href="#">Past Meetups</a>
-            <a href="#">Links</a>
-        </nav>
+    <main class="container mx-auto px-4 py-12">
+      <section
+        id="hero"
+        class="text-center mb-16 bg-white rounded-lg p-8 shadow-lg"
+      >
+        <h1 class="text-4xl font-bold mb-4 text-python-blue">
+          Καλώς ήρθατε στο PyThess
+        </h1>
+        <p class="text-2xl text-gray-700 mb-8">Ένα σοβαρό μιτάπ, γιατί όχι;</p>
+        <p class="text-gray-700 mb-8">
+          Είμαστε μια ομάδα ατόμων που λένε ότι τους αρέσει η Python σαν
+          δικαιολογία για να μαζεύονται μια φορά το μήνα να πίνουν ποτά και να
+          λένε πράματα. Αν σας αρέσουν τα ποτά και τα πράματα, ελάτε κι εσείς,
+          τζάμπα είναι*.
+        </p>
+        <p class="text-gray-300 text-xs mb-8">* Δεν είναι τζάμπα.</p>
+        <a
+          href="https://www.meetup.com/pythess/"
+          class="bg-python-blue text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          ><i class="fa-brands fa-meetup"></i> Ελάτε να μας δείτε</a
+        >
+        <a
+          href="https://discord.gg/U9bRsHfvBy"
+          class="bg-python-blue text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          ><i class="fa-brands fa-discord"></i> Ελάτε να τα πούμε</a
+        >
+        <a
+          href="https://goo.gl/forms/JqVwdpeIwG8xxyan2"
+          class="bg-python-blue text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          >Παρουσιάστε κάτι</a
+        >
+      </section>
 
-        <!-- Main Content Area -->
-        {% block content %}
-        <!-- Here you'll include sections for upcoming/past meetups, your links, etc. -->
-        {% endblock %}
-    </div>
-
-    <footer>
-        <div class="container">
-            <p>&copy; {% now "Y" %} PyThess. All Rights Reserved.</p>
+      {% if future_event %}
+      <section
+        id="next-meetup"
+        class="mb-16 bg-white rounded-lg p-8 shadow-lg border-l-4 border-python-yellow"
+      >
+        <h2 class="text-3xl font-bold mb-4 text-python-blue">
+          {{ future_event.title }}
+        </h2>
+        <div class="bg-white p-6 rounded-lg">
+          <p class="text-gray-600 mb-4">
+            {{ future_event.description|markdownify }}
+          </p>
+          <p class="text-lg font-semibold text-gray-700 mb-2">
+            Πότε: {{ future_event.date_time|date:"l j E Y, H:i" }}
+          </p>
+          <p class="text-gray-600 mb-4">
+            Πού:
+            <a href="{{ future_event.venue.address_url }}"
+              >{{ future_event.venue.name }}</a
+            >
+          </p>
+          <a
+            href="https://www.meetup.com/pythess/events/"
+            class="bg-python-blue text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors inline-block"
+            ><i class="fa-brands fa-meetup"></i> Ελάτε να μας δείτε</a
+          >
         </div>
-    </footer>
+      </section>
+      {% endif %} {% if old_events %}
+      <section id="past-meetups" class="mb-16">
+        <h2 class="text-3xl font-bold mb-4 text-python-blue">Παλιά μίτάψ</h2>
 
-    {% block extra_scripts %}{% endblock %}
-</body>
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {% for event in old_events %}
+          <div
+            class="bg-white p-6 rounded-lg shadow-md border-l-4 border-python-yellow"
+          >
+            <h3 class="font-semibold mb-2 text-python-blue">
+              {{ event.title }}
+            </h3>
+            <p class="text-gray-600 mb-4">
+              {{ event.description|truncatewords:22|markdownify }}
+            </p>
+            <p class="text-sm text-gray-500">
+              <br />
+              {{ event.date_time|date:"l j E Y, H:i" }}
+            </p>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      <section id="testimonials" class="mb-16">
+        <h2 class="text-3xl font-bold mb-8 text-python-blue">Κουτσομπολιό</h2>
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div
+            class="bg-white p-6 rounded-lg shadow-md border-l-4 border-python-yellow"
+          >
+            <p class="text-gray-600 mb-4">
+              Είναι το καλύτερο μιτάπ του κόσμου.
+            </p>
+            <p class="font-semibold text-python-blue">
+              - Σταύρος, διοργανωτής PyThess
+            </p>
+          </div>
+          <div
+            class="bg-white p-6 rounded-lg shadow-md border-l-4 border-python-yellow"
+          >
+            <p class="text-gray-600 mb-4">Συμφωνώ με το Σταύρο.</p>
+            <p class="font-semibold text-python-blue">
+              - Παναγιώτης, συνδιοργανωτής PyThess
+            </p>
+          </div>
+          <div
+            class="bg-white p-6 rounded-lg shadow-md border-l-4 border-python-yellow"
+          >
+            <p class="text-gray-600 mb-4">
+              Why? What's wrong with it? It's a perfectly serious meetup.
+            </p>
+            <p class="font-semibold text-python-blue">
+              - Guido van Rossum, Python developer
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-python-blue text-white py-8">
+      <div class="container mx-auto px-4 text-center text-3xl">
+        <p>
+          <a
+            href="http://github.com/skorokithakis/pythess"
+            title="Ο κώδικάς μας στο GitHub"
+            ><i class="fa-brands fa-github"></i
+          ></a>
+          &nbsp;
+          <a
+            href="https://www.meetup.com/pythess/"
+            title="Η σελίδα μας στο Meetup"
+            ><i class="fa-brands fa-meetup"></i
+          ></a>
+          &nbsp;
+          <a
+            href="https://discord.gg/U9bRsHfvBy"
+            title="Ο σέρβερ μας στο Discord"
+            ><i class="fa-brands fa-discord"></i
+          ></a>
+        </p>
+      </div>
+    </footer>
+  </body>
 </html>
