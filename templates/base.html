@@ -161,9 +161,9 @@
               </div>
           </div>
           <div class="p-6 meetup-description">
-              <p class="text-gray-700 mb-4">
+            <div class="text-gray-700 mb-4 event-description">
               {{ future_event.description|markdownify }}
-              </p>
+              </div>
               <div class="flex flex-col sm:flex-row sm:justify-between items-center">
                   <div class="flex -space-x-2 mb-4 sm:mb-0">
                   </div>
@@ -173,7 +173,7 @@
                       &nbsp;
                       <i class="fa-solid fa-arrow-right"></i>
                   </a>
-              </div>
+            </div>
           </div>
       </div>
       </section>
@@ -261,5 +261,55 @@
         </p>
       </div>
     </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Select all elements with the "event-description" class
+        var descriptions = document.querySelectorAll(".event-description");
+
+        descriptions.forEach(function (desc) {
+          // Get all paragraph elements within the container
+          var paragraphs = Array.from(desc.querySelectorAll("p"));
+
+          // Only proceed if there are more than 3 paragraphs
+          if (paragraphs.length > 3) {
+            // Create a DocumentFragment for the visible paragraphs (first 3)
+            var visibleFragment = document.createDocumentFragment();
+            for (let i = 0; i < 3; i++) {
+              visibleFragment.appendChild(paragraphs[i]);
+            }
+
+            // Create a container for the remaining paragraphs
+            var hiddenContainer = document.createElement("div");
+            hiddenContainer.style.display = "none";
+            for (let i = 3; i < paragraphs.length; i++) {
+              hiddenContainer.appendChild(paragraphs[i]);
+            }
+
+            // Clear the original container and append the fragments
+            desc.innerHTML = "";
+            desc.appendChild(visibleFragment);
+            desc.appendChild(hiddenContainer);
+
+            var readMoreLink = document.createElement("a");
+            readMoreLink.href = "#";
+            readMoreLink.textContent = "Διαβάστε κι άλλα »";
+            readMoreLink.style.color = "#306998";  // site's accent color
+            readMoreLink.style.cursor = "pointer";
+            readMoreLink.style.display = "block";
+            readMoreLink.style.marginTop = "10px";
+
+            desc.appendChild(readMoreLink);
+
+            // When the link is clicked, show the hidden content and hide the link
+            readMoreLink.addEventListener("click", function (e) {
+              e.preventDefault();
+              hiddenContainer.style.display = "block";
+              readMoreLink.style.display = "none";
+            });
+          }
+        });
+      });
+    </script>
   </body>
 </html>
