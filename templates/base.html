@@ -28,6 +28,38 @@
         color: #306998 !important;
         text-decoration: underline !important;
       }
+      .py-accent {
+        color: #306998;
+      }
+      .bg-py-accent {
+        background-color: #306998;
+      }
+      .bg-py-yellow {
+        background-color: #ffd43b;
+      }
+      .meetup-description p {
+          margin-bottom: 0.5em;
+      }
+      .snake-path {
+        animation: slither 15s infinite ease-in-out;
+      }
+      @keyframes slither {
+        0% {
+          transform: translateX(0) rotate(0deg);
+        }
+        25% {
+          transform: translateX(10px) rotate(2deg);
+        }
+        50% {
+          transform: translateX(0) rotate(0deg);
+        }
+        75% {
+          transform: translateX(-10px) rotate(-2deg);
+        }
+        100% {
+          transform: translateX(0) rotate(0deg);
+        }
+      }
     </style>
   </head>
   <body class="bg-gray-50 text-gray-900 font-['Inter',sans-serif]">
@@ -110,33 +142,42 @@
       </section>
 
       {% if future_event %}
-      <section
-        id="next-meetup"
-        class="mb-16 bg-white rounded-lg p-8 shadow-lg border-l-4 border-python-yellow"
-      >
-        <h2 class="text-3xl font-bold mb-4 text-python-blue">
-          {{ future_event.title }}
-        </h2>
-        <div class="bg-white p-6 rounded-lg">
-          <p class="text-gray-600 mb-4">
-            {{ future_event.description|markdownify }}
-          </p>
-          <p class="text-lg font-semibold text-gray-700 mb-2">
-            Πότε: {{ future_event.date_time|date:"l j E Y, H:i" }}
-          </p>
-          <p class="text-gray-600 mb-4">
-            Πού:
-            <a href="{{ future_event.venue.address_url }}"
-              >{{ future_event.venue.name }}</a
-            >
-          </p>
-          <a
-            href="https://www.meetup.com/pythess/events/"
-            class="bg-python-blue text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors inline-block"
-            ><i class="fa-brands fa-meetup"></i> Ελάτε να μας δείτε</a
-          >
-        </div>
+      <section id="next-meetup" class="mb-16">
+      <h2 class="text-3xl font-bold mb-6 py-accent">Επόμενο μιτάπ</h2>
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="bg-py-accent text-white p-6">
+              <h3 class="text-2xl font-bold">
+                  {{ future_event.title }}
+              </h3>
+              <div class="flex items-center mt-3">
+                  <i class="fa-solid fa-calendar-days fa-lg mr-2"></i>
+                  <span>{{ future_event.date_time|date:"l j E Y, H:i" }}</span>
+              </div>
+              <div class="flex items-center mt-2">
+                  <i class="fa-solid fa-location-dot fa-lg mr-2"></i>
+                  <span>
+                      <a href="{{ future_event.venue.address_url }}">{{ future_event.venue.name }}</a>
+                  </span>
+              </div>
+          </div>
+          <div class="p-6 meetup-description">
+              <p class="text-gray-700 mb-4">
+              {{ future_event.description|markdownify }}
+              </p>
+              <div class="flex flex-col sm:flex-row sm:justify-between items-center">
+                  <div class="flex -space-x-2 mb-4 sm:mb-0">
+                  </div>
+                  <a href="https://www.meetup.com/pythess/events/" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-py-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                      <i class="fa-brands fa-meetup"></i>
+                      &nbsp; Ελάτε να μας δείτε
+                      &nbsp;
+                      <i class="fa-solid fa-arrow-right"></i>
+                  </a>
+              </div>
+          </div>
+      </div>
       </section>
+
       {% endif %} {% if old_events %}
       <section id="past-meetups" class="mb-16">
         <h2 class="text-3xl font-bold mb-4 text-python-blue">Παλιά μίτάψ</h2>
