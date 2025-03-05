@@ -56,7 +56,11 @@
                 </h3>
                 <p class="text-sm text-gray-600">
                   {% for presenter in presentation.presenters.all %}
+                  {% if presenter.url %}
                     <a href="{{ presenter.url }}">{{ presenter.name }}</a>
+                  {% else %}
+                    {{ presenter.name }}
+                  {% endif %}
                   {% if not forloop.last %}
                   <br />
                   {% endif %}
