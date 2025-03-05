@@ -75,7 +75,9 @@
           </div>
       </div>
       </section>
-      {% endif %} {% if old_events %}
+      {% endif %}
+      
+      {% if old_events %}
       <section id="past-meetups" class="mb-16">
         <h2 class="text-3xl font-bold mb-4 text-python-blue">Παλιά μίτάψ</h2>
 
@@ -95,6 +97,11 @@
             </p>
           </div>
           {% endfor %}
+        </div>
+        <div class="text-center mt-8">
+          <a href="{% url "past-meetups" %}" class="text-python-blue font-semibold hover:underline">
+            Περισσότερα παλιά μίτάψ »
+          </a>
         </div>
       </section>
       {% endif %}

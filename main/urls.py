@@ -11,4 +11,5 @@ def get_all_events():
 urlpatterns = [
     distill_path("", views.index, name="index"),
     distill_path("meetup/<slug:slug>/", views.meetup, name="meetup", distill_func=get_all_events),
+    distill_path("past-meetups/", views.past_meetups, name="past-meetups"),
 ]

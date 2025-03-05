@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load markdownify %}
+
+{% block title %}Περασμένα μίτάψ{% endblock title %}
+
+{% block content %}
+      <section id="past-meetups" class="mb-16">
+        <h2 class="text-3xl font-bold mb-4 text-python-blue">Περασμένα μίτάψ</h2>
+
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {% for meetup in past_meetups %}
+          <div
+            class="bg-white p-6 rounded-lg shadow-md border-l-4 border-python-yellow"
+          >
+            <h3 class="font-semibold mb-2 text-python-blue">
+              <a href="{{ meetup.get_absolute_url }}">{{ meetup.title }}</a>
+            </h3>
+            <p class="text-sm text-gray-500 italic mb-2">
+              {{ meetup.date_time|date:"l, j E Y" }}
+            </p>
+            <p class="text-gray-600 mb-4">
+              {{ meetup.description|truncatewords:22|markdownify }}
+            </p>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+{% endblock %}
