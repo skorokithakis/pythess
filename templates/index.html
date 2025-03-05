@@ -87,12 +87,11 @@
             <h3 class="font-semibold mb-2 text-python-blue">
               <a href="{{ event.get_absolute_url }}">{{ event.title }}</a>
             </h3>
+            <p class="text-sm text-gray-500 italic mb-2">
+              {{ event.date_time|date:"l, j E Y" }}
+            </p>
             <p class="text-gray-600 mb-4">
               {{ event.description|truncatewords:22|markdownify }}
-            </p>
-            <p class="text-sm text-gray-500">
-              <br />
-              {{ event.date_time|date:"l j E Y, H:i" }}
             </p>
           </div>
           {% endfor %}
