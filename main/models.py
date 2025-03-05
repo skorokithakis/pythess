@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 # Create your models here.
@@ -39,12 +40,16 @@ class Presentation(models.Model):
 
 class Event(models.Model):
     title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True)
     description = models.TextField()
     date_time = models.DateTimeField()
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name="events")
 
     class Meta:
         ordering = ["-date_time"]
+
+    def get_absolute_url(self):
+        return reverse("meetup", kwargs={"slug": self.slug})
 
     def __str__(self):
         return self.title

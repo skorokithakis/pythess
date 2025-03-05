@@ -1,4 +1,4 @@
-{% load static markdownify %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -70,174 +70,12 @@
         <a href="/" class="text-2xl font-bold">
           Py<span class="text-python-yellow">Thess</span></a
         >
-        <ul class="flex space-x-6">
-          <li>
-            <a href="#about" class="hover:text-python-yellow transition-colors"
-              >About</a
-            >
-          </li>
-          <li>
-            <a
-              href="#next-meetup"
-              class="hover:text-python-yellow transition-colors"
-              >Next Meetup</a
-            >
-          </li>
-          <li>
-            <a
-              href="#past-meetups"
-              class="hover:text-python-yellow transition-colors"
-              >Past Meetups</a
-            >
-          </li>
-          <li>
-            <a
-              href="#testimonials"
-              class="hover:text-python-yellow transition-colors"
-              >Testimonials</a
-            >
-          </li>
-          <li>
-            <a
-              href="#contact"
-              class="hover:text-python-yellow transition-colors"
-              >Contact</a
-            >
-          </li>
-        </ul>
       </nav>
     </header>
 
     <main class="container mx-auto px-4 py-12">
-      <section
-        id="hero"
-        class="text-center mb-16 bg-white rounded-lg p-8 shadow-lg"
-      >
-        <h1 class="text-4xl font-bold mb-4 text-python-blue">
-          Καλώς ήρθατε στο PyThess
-        </h1>
-        <p class="text-2xl text-gray-700 mb-8">Ένα σοβαρό μιτάπ, γιατί όχι;</p>
-        <p class="text-gray-700 mb-8">
-          Είμαστε μια ομάδα ατόμων που λένε ότι τους αρέσει η Python σαν
-          δικαιολογία για να μαζεύονται μια φορά το μήνα να πίνουν ποτά και να
-          λένε πράματα. Αν σας αρέσουν τα ποτά και τα πράματα, ελάτε κι εσείς,
-          τζάμπα είναι*.
-        </p>
-        <p class="text-gray-300 text-xs mb-8">* Δεν είναι τζάμπα.</p>
-        <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 justify-center">
-          <a
-            href="https://www.meetup.com/pythess/"
-            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-py-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-            ><i class="fa-brands fa-meetup"></i>&nbsp;Ελάτε να μας δείτε</a
-          >
-          <a
-            href="https://discord.gg/U9bRsHfvBy"
-            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-py-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-            ><i class="fa-brands fa-discord"></i>&nbsp;Ελάτε να τα πούμε</a
-          >
-          <a
-            href="https://goo.gl/forms/JqVwdpeIwG8xxyan2"
-            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-py-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-            >Παρουσιάστε κάτι</a
-          >
-        </div>
-      </section>
-
-      {% if future_event %}
-      <section id="next-meetup" class="mb-16">
-      <h2 class="text-3xl font-bold mb-6 py-accent">Επόμενο μιτάπ</h2>
-      <div class="bg-white rounded-lg shadow-md overflow-hidden">
-          <div class="bg-py-accent text-white p-6">
-              <h3 class="text-2xl font-bold">
-                  {{ future_event.title }}
-              </h3>
-              <div class="flex items-center mt-3">
-                  <i class="fa-solid fa-calendar-days fa-lg mr-2"></i>
-                  <span>{{ future_event.date_time|date:"l j E Y, H:i" }}</span>
-              </div>
-              <div class="flex items-center mt-2">
-                  <i class="fa-solid fa-location-dot fa-lg mr-2"></i>
-                  <span>
-                      <a href="{{ future_event.venue.address_url }}">{{ future_event.venue.name }}</a>
-                  </span>
-              </div>
-          </div>
-          <div class="p-6 meetup-description">
-            <div class="text-gray-700 mb-4 event-description">
-              {{ future_event.description|markdownify }}
-              </div>
-              <div class="flex flex-col sm:flex-row sm:justify-between items-center">
-                  <div class="flex -space-x-2 mb-4 sm:mb-0">
-                  </div>
-                  <a href="https://www.meetup.com/pythess/events/" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-py-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
-                      <i class="fa-brands fa-meetup"></i>
-                      &nbsp; Ελάτε να μας δείτε
-                      &nbsp;
-                      <i class="fa-solid fa-arrow-right"></i>
-                  </a>
-            </div>
-          </div>
-      </div>
-      </section>
-
-      {% endif %} {% if old_events %}
-      <section id="past-meetups" class="mb-16">
-        <h2 class="text-3xl font-bold mb-4 text-python-blue">Παλιά μίτάψ</h2>
-
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {% for event in old_events %}
-          <div
-            class="bg-white p-6 rounded-lg shadow-md border-l-4 border-python-yellow"
-          >
-            <h3 class="font-semibold mb-2 text-python-blue">
-              {{ event.title }}
-            </h3>
-            <p class="text-gray-600 mb-4">
-              {{ event.description|truncatewords:22|markdownify }}
-            </p>
-            <p class="text-sm text-gray-500">
-              <br />
-              {{ event.date_time|date:"l j E Y, H:i" }}
-            </p>
-          </div>
-          {% endfor %}
-        </div>
-      </section>
-      {% endif %}
-
-      <section id="testimonials" class="mb-16">
-        <h2 class="text-3xl font-bold mb-8 text-python-blue">Κουτσομπολιό</h2>
-        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          <div
-            class="bg-white p-6 rounded-lg shadow-md border-l-4 border-python-yellow"
-          >
-            <p class="text-gray-600 mb-4">
-              Είναι το καλύτερο μιτάπ του κόσμου.
-            </p>
-            <p class="font-semibold text-python-blue">
-              - Σταύρος, διοργανωτής PyThess
-            </p>
-          </div>
-          <div
-            class="bg-white p-6 rounded-lg shadow-md border-l-4 border-python-yellow"
-          >
-            <p class="text-gray-600 mb-4">Συμφωνώ με το Σταύρο.</p>
-            <p class="font-semibold text-python-blue">
-              - Παναγιώτης, συνδιοργανωτής PyThess
-            </p>
-          </div>
-          <div
-            class="bg-white p-6 rounded-lg shadow-md border-l-4 border-python-yellow"
-          >
-            <p class="text-gray-600 mb-4">
-              Why? What's wrong with it? It's a perfectly serious meetup.
-            </p>
-            <p class="font-semibold text-python-blue">
-              - Guido van Rossum, Python developer
-            </p>
-          </div>
-        </div>
-      </section>
+    {% block content %}
+    {% endblock %}
     </main>
 
     <footer class="bg-python-blue text-white py-8">
@@ -263,55 +101,5 @@
         </p>
       </div>
     </footer>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // Select all elements with the "event-description" class
-        var descriptions = document.querySelectorAll(".event-description");
-
-        descriptions.forEach(function (desc) {
-          // Get all paragraph elements within the container
-          var paragraphs = Array.from(desc.querySelectorAll("p"));
-
-          // Only proceed if there are more than 3 paragraphs
-          if (paragraphs.length > 3) {
-            // Create a DocumentFragment for the visible paragraphs (first 3)
-            var visibleFragment = document.createDocumentFragment();
-            for (let i = 0; i < 3; i++) {
-              visibleFragment.appendChild(paragraphs[i]);
-            }
-
-            // Create a container for the remaining paragraphs
-            var hiddenContainer = document.createElement("div");
-            hiddenContainer.style.display = "none";
-            for (let i = 3; i < paragraphs.length; i++) {
-              hiddenContainer.appendChild(paragraphs[i]);
-            }
-
-            // Clear the original container and append the fragments
-            desc.innerHTML = "";
-            desc.appendChild(visibleFragment);
-            desc.appendChild(hiddenContainer);
-
-            var readMoreLink = document.createElement("a");
-            readMoreLink.href = "#";
-            readMoreLink.textContent = "Διαβάστε κι άλλα »";
-            readMoreLink.style.color = "#306998";  // site's accent color
-            readMoreLink.style.cursor = "pointer";
-            readMoreLink.style.display = "block";
-            readMoreLink.style.marginTop = "10px";
-
-            desc.appendChild(readMoreLink);
-
-            // When the link is clicked, show the hidden content and hide the link
-            readMoreLink.addEventListener("click", function (e) {
-              e.preventDefault();
-              hiddenContainer.style.display = "block";
-              readMoreLink.style.display = "none";
-            });
-          }
-        });
-      });
-    </script>
   </body>
 </html>

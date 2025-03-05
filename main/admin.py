@@ -25,6 +25,7 @@ class PresentationAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ("title", "date_time", "venue")
+    prepopulated_fields = {"slug": ["title"]}
+    list_display = ("title", "slug", "date_time", "venue")
     list_filter = ("date_time", "venue")
     search_fields = ("title", "description")
