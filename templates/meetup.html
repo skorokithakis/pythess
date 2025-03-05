@@ -34,7 +34,7 @@
       {% if event.presentations.count %}
       <section id="presentations" class="mb-16">
           <h2 class="text-3xl font-bold mb-6 text-python-blue">Παρουσιάσεις</h2>
-          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div class="grid gap-6">
             {% for presentation in event.presentations.all %}
               <div class="card bg-white rounded-lg p-4 border-l-4 border-python-yellow">
                 <h3 class="text-xl font-semibold mb-2">
