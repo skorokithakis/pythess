@@ -174,3 +174,4 @@ cython_debug/
 output/
 _static/
 pages/
+meetups.json
