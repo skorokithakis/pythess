@@ -76,10 +76,14 @@
       </div>
       </section>
       {% endif %}
-      
+
       {% if old_events %}
       <section id="past-meetups" class="mb-16">
-        <h2 class="text-3xl font-bold mb-4 text-python-blue">Παλιά μίτάψ</h2>
+      <h2 class="text-3xl font-bold mb-4 text-python-blue">
+          <a href="{% url "past-meetups" %}" class="text-python-blue font-semibold hover:underline">
+              Περασμένα μίτάψ
+          </a>
+      </h2>
 
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {% for event in old_events %}
@@ -100,7 +104,7 @@
         </div>
         <div class="text-center mt-8">
           <a href="{% url "past-meetups" %}" class="text-python-blue font-semibold hover:underline">
-            Περισσότερα παλιά μίτάψ »
+            Περισσότερα περασμένα μίτάψ »
           </a>
         </div>
       </section>
