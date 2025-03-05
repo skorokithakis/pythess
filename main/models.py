@@ -16,6 +16,7 @@ class Person(models.Model):
     url = models.URLField(blank=True)
 
     class Meta:
+        ordering = ["name"]
         verbose_name_plural = "people"
 
     def __str__(self):

@@ -1,7 +1,11 @@
 from django.contrib import admin
 
+from .models import Event
+from .models import Person
+from .models import Presentation
+from .models import Venue
+
 # Register your models here.
-from .models import Venue, Person, Presentation, Event
 
 
 @admin.register(Venue)
@@ -18,7 +22,8 @@ class PersonAdmin(admin.ModelAdmin):
 
 @admin.register(Presentation)
 class PresentationAdmin(admin.ModelAdmin):
-    list_display = ("name", "url")
+    list_display = ("name", "url", "event", "order")
+    ordering = ["event", "order"]
     search_fields = ("name",)
     filter_horizontal = ("presenters",)
 
