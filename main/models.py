@@ -37,6 +37,11 @@ class Presentation(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def presenter_names(self):
+        # Return a comma-separated list of presenter names
+        return ", ".join([person.name for person in self.presenters.all()])
+
 
 class Event(models.Model):
     title = models.CharField(max_length=255)

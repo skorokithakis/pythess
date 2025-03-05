@@ -6,6 +6,7 @@
 
 {% block content %}
       <section id="next-meetup" class="mb-16">
+          <h2 class="text-3xl font-bold mb-6 text-python-blue">Το μίτάπ</h2>
       <div class="bg-white rounded-lg shadow-md overflow-hidden">
           <div class="bg-py-accent text-white p-6">
               <h3 class="text-2xl font-bold">
@@ -39,4 +40,31 @@
           </div>
       </div>
       </section>
+
+      {% if event.presentations.count %}
+      <section id="presentations" class="mb-16">
+          <h2 class="text-3xl font-bold mb-6 text-python-blue">Παρουσιάσεις</h2>
+          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {% for presentation in event.presentations.all %}
+              <div class="card bg-white rounded-lg p-4 border-l-4 border-python-yellow">
+                <h3 class="text-xl font-semibold mb-2">
+                  {% if presentation.url %}
+                    <a href="{{ presentation.url }}" class="hover:underline">{{ presentation.name }}</a>
+                  {% else %}
+                    {{ presentation.name }}
+                  {% endif %}
+                </h3>
+                <p class="text-sm text-gray-600">
+                  {% for presenter in presentation.presenters.all %}
+                    <a href="{{ presenter.url }}">{{ presenter.name }}</a>
+                  {% if not forloop.last %}
+                  <br />
+                  {% endif %}
+                  {% endfor %}
+                </p>
+              </div>
+            {% endfor %}
+          </div>
+      </section>
+      {% endif %}
 {% endblock %}
