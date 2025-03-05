@@ -45,6 +45,7 @@ class Presentation(models.Model):
 
 class Event(models.Model):
     title = models.CharField(max_length=255)
+    meetup_com_id = models.CharField(max_length=255, blank=True)
     slug = models.SlugField(max_length=255, unique=True)
     description = models.TextField()
     date_time = models.DateTimeField()
