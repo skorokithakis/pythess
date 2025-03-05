@@ -9,9 +9,7 @@ def past_meetups(request):
     past_events = Event.objects.filter(date_time__lt=timezone.now()).order_by(
         "-date_time"
     )
-    return render(
-        request, "past_meetups.html", {"past_meetups": past_events}
-    )
+    return render(request, "past_meetups.html", {"past_meetups": past_events})
 
 
 def index(request):

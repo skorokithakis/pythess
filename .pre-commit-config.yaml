@@ -9,9 +9,7 @@ repos:
       exclude: meetup_files
 - repo: https://github.com/pre-commit/mirrors-mypy
   rev: v1.9.0
-  exclude: meetup_files
   hooks:
   - id: mypy
     name: Run MyPy typing checks.
     args: ["--ignore-missing-imports", "--install-types", "--non-interactive"]
-    exclude: meetup_files

@@ -8,17 +8,17 @@ from urlify import urlify
 current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(current_dir)
 
-import django
+import django  # noqa
 
 # Set the Django settings module and initialize Django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pythess.settings")
 django.setup()
 
-import json
+import json  # noqa
 
-from pydantic import BaseModel, Field
-from datetime import datetime
-from main.models import Event
+from pydantic import BaseModel, Field  # noqa
+from datetime import datetime  # noqa
+from main.models import Event  # noqa
 
 
 class Meetup(BaseModel):

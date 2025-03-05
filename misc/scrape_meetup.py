@@ -9,7 +9,6 @@
 import json
 import re
 import sys
-from pprint import pprint
 
 import requests
 
