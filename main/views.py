@@ -12,6 +12,10 @@ def past_meetups(request):
     return render(request, "past_meetups.html", {"past_meetups": past_events})
 
 
+def rules(request):
+    return render(request, "rules.html")
+
+
 def index(request):
     future_event = Event.objects.filter(date_time__gt=timezone.now()).first()
     old_events = Event.objects.filter(date_time__lt=timezone.now()).order_by(
