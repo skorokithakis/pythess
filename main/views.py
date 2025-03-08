@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.utils import timezone
 
-from main.models import Event, Person
+from main.models import Event, Person, Presentation
 
 
 def past_meetups(request):
@@ -20,6 +20,11 @@ def person(request, slug):
 def people(request):
     people = Person.objects.all().order_by("name")
     return render(request, "people.html", {"people": people})
+
+
+def presentations(request):
+    presentations = Presentation.objects.all().order_by("name")
+    return render(request, "presentations.html", {"presentations": presentations})
 
 
 def rules(request):

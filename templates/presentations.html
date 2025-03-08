@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% load markdownify %}
+
+{% block title %}{{ person.name }}{% endblock title %}
+
+{% block content %}
+<section id="presentations" class="mb-16">
+    <h2 class="text-3xl font-bold mb-6 text-python-blue">Παρουσιάσεις</h2>
+    {% for presentation in presentations %}
+    <div class="grid gap-6">
+    {% include "presentation.html" with presentation=presentation %}
+    </div>
+    {% endfor %}
+</section>
+{% endblock %}
