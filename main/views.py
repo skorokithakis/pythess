@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.utils import timezone
 
-from main.models import Event
+from main.models import Event, Person
 
 
 def past_meetups(request):
@@ -10,6 +10,11 @@ def past_meetups(request):
         "-date_time"
     )
     return render(request, "past_meetups.html", {"past_meetups": past_events})
+
+
+def person(request, slug):
+    person = get_object_or_404(Person, slug=slug)
+    return render(request, "person.html", {"person": person})
 
 
 def rules(request):

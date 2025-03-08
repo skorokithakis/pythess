@@ -16,7 +16,8 @@ class VenueAdmin(admin.ModelAdmin):
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ("name", "url")
+    prepopulated_fields = {"slug": ["name"]}
+    list_display = ("name", "slug", "url")
     search_fields = ("name",)
 
 

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% load markdownify %}
+
+{% block title %}{{ person.name }}{% endblock title %}
+
+{% block content %}
+<section id="next-meetup" class="mb-16">
+<h2 class="text-3xl font-bold mb-6 text-python-blue">Ο άνθρωπος</h2>
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <div class="bg-py-accent text-white p-6">
+        <h3 class="text-2xl font-bold">
+            {{ person.name}}
+        </h3>
+        {% if person.url %}
+        <div class="flex items-center mt-3">
+            <i class="fa-solid fa-link fa-lg mr-2"></i>
+            <span><a href="{{ person.url }}">{{ person.url }}</a></span>
+        </div>
+        {% endif %}
+    </div>
+    <div class="p-6 meetup-description">
+        <div class="text-gray-700 mb-4 event-description">
+            <h2 class="text-3xl font-bold mb-6 text-python-blue">Οι παρουσιάσεις {% if person.gender == "male" %}του{% else %}της{% endif %}</h2>
+            <p class="text-gray-600">
+            {% if person.gender == "male" %}Ο{% else %}Η{% endif %} {{ person.name }} μάς έχει παρουσιάσει τα εξής:
+            </p>
+          <section id="presentations" class="mb-16">
+              <div class="grid gap-6">
+                {% for presentation in person.presentations.all %}
+                {% include "presentation.html" with presentation=presentation %}
+                {% endfor %}
+              </div>
+          </section>
+        </div>
+    </div>
+</div>
+</section>
+{% endblock %}

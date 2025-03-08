@@ -1,0 +1,25 @@
+<div class="card bg-white rounded-lg p-4 border-l-4 border-python-yellow">
+    <h3 class="text-xl font-semibold mb-2">
+        {% if presentation.url %}
+        <a href="{{ presentation.url }}" class="hover:underline">{{ presentation.name }}</a>
+        {% else %}
+        {{ presentation.name }}
+        {% endif %}
+    </h3>
+    <p class="text-sm text-gray-600 mb-2 last:mb-0">
+    <i class="fa-solid fa-user fa-lg mr-2"></i>
+    {% for presenter in presentation.presenters.all %}
+    <span><a href="{{ presenter.get_absolute_url }}">{{ presenter.name }}{% if not forloop.last %},{% endif %}</a></span>
+    {% endfor %}
+    </p>
+    <p class="text-sm text-gray-600 mb-2 last:mb-0">
+    <i class="fa-solid fa-users fa-lg mr-2"></i>
+    <span><a href="{{ presentation.event.get_absolute_url }}">{{ presentation.event.title }}</a></span>
+    </p>
+    {% if presentation.url %}
+    <p class="text-sm text-gray-600 mb-2 last:mb-0">
+    <i class="fa-solid fa-link fa-lg mr-2"></i>
+    <span><a href="{{ presentation.url }}">{{ presentation.url }}</a></span>
+    </p>
+    {% endif %}
+</div>
