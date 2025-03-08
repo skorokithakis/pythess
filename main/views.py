@@ -17,6 +17,11 @@ def person(request, slug):
     return render(request, "person.html", {"person": person})
 
 
+def people(request):
+    people = Person.objects.all().order_by("name")
+    return render(request, "people.html", {"people": people})
+
+
 def rules(request):
     return render(request, "rules.html")
 
