@@ -17,6 +17,7 @@ class Person(models.Model):
         max_length=255, choices=[("male", "Male"), ("female", "Female")]
     )
     slug = models.SlugField(max_length=255, unique=True)
+    bio = models.TextField(blank=True)
     url = models.URLField(blank=True)
 
     class Meta:
