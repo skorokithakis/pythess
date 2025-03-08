@@ -14,7 +14,9 @@ class Venue(models.Model):
 class Person(models.Model):
     name = models.CharField(max_length=255)
     gender = models.CharField(
-        max_length=255, choices=[("male", "Male"), ("female", "Female")]
+        max_length=255,
+        choices=[("male", "Male"), ("female", "Female")],
+        default="male",
     )
     slug = models.SlugField(max_length=255, unique=True)
     bio = models.TextField(blank=True)

@@ -17,7 +17,7 @@ def get_all_people():
 urlpatterns = [
     distill_path("", views.index, name="index"),
     distill_path(
-        "person/<slug:slug>/", views.person, name="person", distill_func=get_all_events
+        "person/<slug:slug>/", views.person, name="person", distill_func=get_all_people
     ),
     distill_path(
         "meetup/<slug:slug>/", views.meetup, name="meetup", distill_func=get_all_events
