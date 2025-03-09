@@ -175,3 +175,4 @@ output/
 _static/
 pages/
 meetups.json
+.DS_Store
