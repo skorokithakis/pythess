@@ -4,8 +4,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="PyThess - Ένα σοβαρό μιτάπ για την Python στη Θεσσαλονίκη">
+    <meta name="theme-color" content="#306998">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>{% block title %}Καλησπέρα{% endblock %} - PyThess</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
 
     <script>
       tailwind.config = {
@@ -15,8 +20,39 @@
               "python-blue": "#306998",
               "python-yellow": "#FFD43B",
             },
+            typography: {
+              DEFAULT: {
+                css: {
+                  a: {
+                    color: '#306998',
+                    '&:hover': {
+                      color: '#1a4971',
+                    },
+                  },
+                  h1: {
+                    color: '#306998',
+                  },
+                  h2: {
+                    color: '#306998',
+                  },
+                  h3: {
+                    color: '#306998',
+                  },
+                },
+              },
+            },
           },
         },
+        plugins: [
+          function({ addBase, theme }) {
+            addBase({
+              'html': { fontSize: '16px' },
+              '@media (max-width: 640px)': {
+                html: { fontSize: '14px' }
+              }
+            })
+          }
+        ],
       };
     </script>
     <style>
@@ -68,41 +104,127 @@
         transform: scale(1.03);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
       }
+
+      /* Responsive improvements */
+      @media (max-width: 640px) {
+        .container {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+
+        h1 {
+          font-size: 1.75rem;
+        }
+
+        h2 {
+          font-size: 1.5rem;
+        }
+
+        h3 {
+          font-size: 1.25rem;
+        }
+      }
+
+      /* Make images responsive */
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      /* Mobile menu */
+      .mobile-menu-button {
+        display: none;
+      }
+
+      @media (max-width: 640px) {
+        .mobile-menu-button {
+          display: block;
+        }
+
+        .nav-menu {
+          display: none;
+        }
+
+        .nav-menu.open {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          margin-top: 1rem;
+        }
+
+        .nav-menu.open li {
+          margin: 0.5rem 0;
+        }
+      }
     </style>
   </head>
   <body class="bg-gray-50 text-gray-900 font-['Inter',sans-serif]">
     <header class="bg-python-blue text-white shadow-md">
-      <nav
-        class="container mx-auto px-4 py-4 flex justify-between items-center"
-      >
-        <a href="/" class="text-2xl font-bold">
-          Py<span class="text-python-yellow">Thess</span></a
-        >
-        <ul class="flex space-x-6">
+      <nav class="container mx-auto px-4 py-4">
+        <div class="flex justify-between items-center">
+          <a href="/" class="text-2xl font-bold">
+            Py<span class="text-python-yellow">Thess</span></a>
+
+          <!-- Mobile menu button -->
+          <button class="mobile-menu-button text-white hover:text-python-yellow focus:outline-none" id="mobile-menu-button">
+            <i class="fa-solid fa-bars text-xl"></i>
+          </button>
+
+          <!-- Desktop menu -->
+          <ul class="hidden sm:flex space-x-6">
+            <li>
+              <a href="{% url "people" %}" class="hover:text-python-yellow transition-colors">
+                Παρουσιαστές
+              </a>
+            </li>
+            <li>
+              <a href="{% url "presentations" %}" class="hover:text-python-yellow transition-colors">
+                Παρουσιάσεις
+              </a>
+            </li>
+            <li>
+              <a href="{% url "rules" %}" class="hover:text-python-yellow transition-colors">
+                Κανόνες
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Mobile menu (hidden by default) -->
+        <ul class="nav-menu mt-4" id="mobile-menu">
           <li>
-            <a
-                href="{% url "people" %}"
-              class="hover:text-python-yellow transition-colors"
-              >Παρουσιαστές</a
-            >
+            <a href="{% url "people" %}" class="block py-2 hover:text-python-yellow transition-colors">
+              Παρουσιαστές
+            </a>
           </li>
           <li>
-            <a
-                href="{% url "presentations" %}"
-              class="hover:text-python-yellow transition-colors"
-              >Παρουσιάσεις</a
-            >
+            <a href="{% url "presentations" %}" class="block py-2 hover:text-python-yellow transition-colors">
+              Παρουσιάσεις
+            </a>
           </li>
           <li>
-            <a
-                href="{% url "rules" %}"
-              class="hover:text-python-yellow transition-colors"
-              >Κανόνες</a
-            >
+            <a href="{% url "rules" %}" class="block py-2 hover:text-python-yellow transition-colors">
+              Κανόνες
+            </a>
           </li>
         </ul>
       </nav>
     </header>
+
+    <script>
+      // Mobile menu toggle
+      document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', function() {
+          mobileMenu.classList.toggle('open');
+          mobileMenuButton.innerHTML = mobileMenu.classList.contains('open')
+            ? '<i class="fa-solid fa-xmark text-xl"></i>'
+            : '<i class="fa-solid fa-bars text-xl"></i>';
+        });
+      });
+    </script>
 
     <main class="container mx-auto px-4 py-12">
     {% block content %}
@@ -110,30 +232,31 @@
     </main>
 
     <footer class="bg-python-blue text-white py-8">
-      <div class="container mx-auto px-4 text-center text-3xl">
-        <p>
-          <a href="mailto:kalispera@pythess.org?subject=Έχω πράματα να πω"
-	     title="Στείλτε μας email, όπως τον παλιό καιρό"><i
-             class="fa-solid fa-envelope"></i></a>
-          &nbsp;
-          <a
-            href="http://github.com/skorokithakis/pythess"
-            title="Ο κώδικάς μας στο GitHub"
-            ><i class="fa-brands fa-github"></i
-          ></a>
-          &nbsp;
-          <a
-            href="https://www.meetup.com/pythess/"
-            title="Η σελίδα μας στο Meetup"
-            ><i class="fa-brands fa-meetup"></i
-          ></a>
-          &nbsp;
-          <a
-            href="https://discord.gg/U9bRsHfvBy"
-            title="Ο σέρβερ μας στο Discord"
-            ><i class="fa-brands fa-discord"></i
-          ></a>
-        </p>
+      <div class="container mx-auto px-4 text-center">
+        <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0">
+          <div class="flex space-x-6 text-2xl sm:text-3xl">
+            <a href="mailto:kalispera@pythess.org?subject=Έχω πράματα να πω"
+               class="hover:text-python-yellow transition-colors"
+               title="Στείλτε μας email, όπως τον παλιό καιρό">
+              <i class="fa-solid fa-envelope"></i>
+            </a>
+            <a href="http://github.com/skorokithakis/pythess"
+               class="hover:text-python-yellow transition-colors"
+               title="Ο κώδικάς μας στο GitHub">
+              <i class="fa-brands fa-github"></i>
+            </a>
+            <a href="https://www.meetup.com/pythess/"
+               class="hover:text-python-yellow transition-colors"
+               title="Η σελίδα μας στο Meetup">
+              <i class="fa-brands fa-meetup"></i>
+            </a>
+            <a href="https://discord.gg/U9bRsHfvBy"
+               class="hover:text-python-yellow transition-colors"
+               title="Ο σέρβερ μας στο Discord">
+              <i class="fa-brands fa-discord"></i>
+            </a>
+          </div>
+        </div>
       </div>
     </footer>
   </body>
