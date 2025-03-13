@@ -7,12 +7,12 @@ from main.models import Person
 def get_bio(name: str) -> str:
     client = anthropic.Anthropic()
     prompt = f"""
-I run the Thessaloniki Python meetup. I run it in a tongue-in-cheek style, and we get
-people presenting at the events. I want to add a short, fictional backstory/bio for each
-one. It has to be tongue-in-cheek and maybe tearjerk-y, and it has to relate to Python
-or technology somehow. It also has to be in Greek. For example:
+I run the Thessaloniki Python meetup (called PyThess). I run it in a tongue-in-cheek
+style, and we get people presenting at the events. I want to add a short, fictional
+backstory/bio for each one. It has to be tongue-in-cheek and maybe tearjerk-y, and it
+has to relate to Python or technology somehow. It also has to be in Greek.
 
-The speaker's name is "Σταύρος Κοροκυθάκης". The bio:
+For example, this speaker's name is "Σταύρος Κοροκυθάκης". The bio should be:
 
 Ο Σταύρος μεγάλωσε στους υπονόμους της Αθήνας, έχοντας αρουραίους για κατοικίδια και
 κατσαρίδες για μύγες. Στα 18 του, αποφάσισε να φύγει από τον υπόνομο και να ανέβει στην
@@ -22,10 +22,11 @@ The speaker's name is "Σταύρος Κοροκυθάκης". The bio:
 άρεσε πολύ στο Σταύρο γιατί θα εκπλησσόσασταν αν μαθαίνατε πόσοι πύθωνες πετιούνται κάθε
 μέρα στην τουαλέτα, και καταλήγουν στον υπόνομο. Τα υπόλοιπα, όπως λέμε, είναι ιστορία.
 
-The speaker's name is "Παναγιώτης Παπαεμμανουήλ". The bio:
+Another example, this speaker's name is "Παναγιώτης Παπαεμμανουήλ". The bio should be:
 
 Ο Παναγιώτης γεννήθηκε μια νύχτα που το φεγγάρι δεν έλαμπε, κυρίως γιατί κατάλαβε ότι
-πάει να γεννηθεί ο Παναγιώτης. Δεν είναι τυχαίο που από εκεί βγαίνει η λέξη "lunacy", ψάχτε το.
+πάει να γεννηθεί ο Παναγιώτης. Δεν είναι τυχαίο που από εκεί βγαίνει η λέξη "lunacy",
+ψάχτε το.
 
 Ο Παναγιώτης εν τέλει γεννήθηκε, και μεγάλωσε κιόλας, με αρκετή δυσκολία. Οι γονείς του,
 που ήταν απλοί, καθημερινοί άνθρωποι, δε μπορούσαν να διαχειριστούν το γεγονός ότι
@@ -38,8 +39,8 @@ The speaker's name is "Παναγιώτης Παπαεμμανουήλ". The bio
 
 Από τότε ο Παναγιώτης συνέχισε να είναι data scientist μέχρι σήμερα.
 
-Now do one like the example, for a speaker called "{name}". Add two newlines between
-paragraphs, with no headings.
+Now do one like the example, for a speaker called "{name}". Don't add Markdown headings,
+and add two newlines between paragraphs.
 """
     message = client.messages.create(
         model="claude-3-7-sonnet-20250219",
