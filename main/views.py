@@ -15,7 +15,11 @@ from main.models import Presentation
 
 
 def headers(request):
+    """Generate the required headers for Cloudflare Pages."""
     lines = []
+    # We're only doing future events because CF Pages has a 100 rule limit, and people
+    # probably don't need to add old events to their calendars. If they do, they need to
+    # sort their life out.
     for event in Event.objects.filter(date_time__gt=timezone.now()):
         lines.append(
             f"{reverse('meetup-ics', args=[event.slug])}:\n Content-Type: text/calendar"

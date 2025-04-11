@@ -70,6 +70,7 @@ class Event(models.Model):
         return reverse("meetup", kwargs={"slug": self.slug})
 
     def has_passed(self):
+        """Whether an event has passed."""
         return self.date_time < timezone.now()
 
     def __str__(self):
