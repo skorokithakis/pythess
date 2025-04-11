@@ -1,12 +1,27 @@
+from datetime import timedelta
+
+from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
+from django.urls import reverse
 from django.utils import timezone
-from django.http import HttpResponse
-from datetime import timedelta
-from django.contrib.sites.shortcuts import get_current_site
+from ics import Calendar
+from ics import Event as IcsEvent
 
-from main.models import Event, Person, Presentation
-from ics import Calendar, Event as IcsEvent
+from main.models import Event
+from main.models import Person
+from main.models import Presentation
+
+
+def headers(request):
+    lines = []
+    for event in Event.objects.filter(date_time__gt=timezone.now()):
+        lines.append(
+            f"{reverse('meetup-ics', args=[event.slug])}:\n Content-Type: text/calendar"
+        )
+
+    return HttpResponse("\n\n".join(lines))
 
 
 def past_meetups(request):

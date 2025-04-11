@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
 uv run manage.py distill-local --collectstatic --quiet --force output
-cp misc/_headers output/

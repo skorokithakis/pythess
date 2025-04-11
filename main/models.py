@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.urls import reverse
 
 
@@ -67,6 +68,9 @@ class Event(models.Model):
 
     def get_absolute_url(self):
         return reverse("meetup", kwargs={"slug": self.slug})
+
+    def has_passed(self):
+        return self.date_time < timezone.now()
 
     def __str__(self):
         return self.title
