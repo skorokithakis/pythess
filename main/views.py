@@ -1,8 +1,12 @@
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.utils import timezone
+from django.http import HttpResponse
+from datetime import timedelta
+from django.contrib.sites.shortcuts import get_current_site
 
 from main.models import Event, Person, Presentation
+from ics import Calendar, Event as IcsEvent
 
 
 def past_meetups(request):
@@ -44,3 +48,22 @@ def index(request):
 def meetup(request, slug):
     event = get_object_or_404(Event, slug=slug)
     return render(request, "meetup.html", {"event": event})
+
+
+def meetup_ics(request, slug):
+    event = get_object_or_404(Event, slug=slug)
+    calendar = Calendar()
+    cal_event = IcsEvent()
+    cal_event.name = f"PyThess - {event.title}"
+    cal_event.description = event.description
+    cal_event.location = f"{event.venue.name} ({event.venue.address_url})"
+    cal_event.url = (
+        f"https://{get_current_site(request).domain}{event.get_absolute_url()}"
+    )
+    cal_event.begin = event.date_time
+    cal_event.end = event.date_time + timedelta(hours=6)
+    calendar.events.add(cal_event)
+
+    response = HttpResponse(calendar.serialize(), content_type="text/calendar")
+    response["Content-Disposition"] = f'attachment; filename="{slug}.ics"'
+    return response

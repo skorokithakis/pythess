@@ -1,7 +1,8 @@
 from django_distill import distill_path
 
 from . import views
-from .models import Event, Person
+from .models import Event
+from .models import Person
 
 
 def get_all_events():
@@ -23,6 +24,12 @@ urlpatterns = [
     ),
     distill_path(
         "meetup/<slug:slug>/", views.meetup, name="meetup", distill_func=get_all_events
+    ),
+    distill_path(
+        "meetup/<slug:slug>/ics/",
+        views.meetup_ics,
+        name="meetup-ics",
+        distill_func=get_all_events,
     ),
     distill_path("past-meetups/", views.past_meetups, name="past-meetups"),
     distill_path("rules/", views.rules, name="rules"),
