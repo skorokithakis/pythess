@@ -22,7 +22,7 @@ def headers(request):
     # sort their life out.
     for event in Event.objects.filter(date_time__gt=timezone.now()):
         lines.append(
-            f"{reverse('meetup-ics', args=[event.slug])}\n Content-Type: text/calendar"
+            f"{reverse('meetup-ics', args=[event.slug])}\n  Content-Type: text/calendar"
         )
 
     return HttpResponse("\n\n".join(lines))
