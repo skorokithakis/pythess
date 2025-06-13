@@ -2,3 +2,6 @@
 
 uv run manage.py distill-local --collectstatic --quiet --force output
 cp root_files/* output/
+
+# For some reason, the domain on the feed is http://testserver, so change that here.
+sed -i 's|http://testserver|https://www.pythess.org|g' output/feed/index.html
