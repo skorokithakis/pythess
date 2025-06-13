@@ -1,9 +1,0 @@
-source "https://rubygems.org"
-ruby "1.9.3"
-
-gem 'slideshow'
-gem 'activerecord'
-gem 'rake'
-gem 'ultraviolet'
-gem 'coderay'
-gem 'launchy'

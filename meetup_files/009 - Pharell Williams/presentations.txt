@@ -1,2 +1,0 @@
-* Sam Tsartsaris - POX SDN
-* Stavros Korokithakis - [Emergency Food Button](https://www.stavros.io/posts/emergency-food-button/)

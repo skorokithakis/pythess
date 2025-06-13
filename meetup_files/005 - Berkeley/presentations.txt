@@ -1,2 +1,0 @@
-* Stavros Korokithakis - Security presentation
-* Theodoros Ploumis - Ansible deployments
