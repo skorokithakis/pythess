@@ -86,3 +86,7 @@ def meetup_ics(request, slug):
     response = HttpResponse(calendar.serialize(), content_type="text/calendar")
     response["Content-Disposition"] = f'attachment; filename="{slug}.ics"'
     return response
+
+
+def page_not_found(request):
+    return render(request, "404.html")

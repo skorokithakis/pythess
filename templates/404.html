@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load markdownify %}
+
+{% block title %}Λάθος στροφή στην Άλμπουκερκη{% endblock title %}
+
+{% block content %}
+      <section
+        id="hero"
+        class="text-center mb-16 bg-white rounded-lg p-4 sm:p-8 shadow-lg overflow-hidden relative"
+      >
+        <div class="max-w-4xl mx-auto">
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-python-blue">
+		Αυτή η σελίδα ΔΕΝ ΥΠΑΡΧΕΙ.
+          </h1>
+          <p class="text-xl sm:text-2xl text-gray-700 mb-4 sm:mb-8">Δεν ξέρω τι θες εδώ.</p>
+          <p class="text-gray-700 mb-4 sm:mb-8 max-w-3xl mx-auto">
+		Δεν ξέρω τι έψαχνες, μάλλον ούτε εσύ ξέρεις τι έψαχνες, αλλά εδώ δεν είναι. Να πας αλλού.
+          </p>
+          <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0 justify-center">
+            <a
+              href="/"
+              class="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 border border-transparent text-sm sm:text-base font-medium rounded-md text-white bg-py-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors shadow-md hover:shadow-lg"
+              >Αλλού</a
+            >
+          </div>
+        </div>
+      </section>
+{% endblock %}
