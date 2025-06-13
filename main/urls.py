@@ -1,4 +1,5 @@
 from django_distill import distill_path
+from .feeds import LatestMeetupsFeed
 
 from . import views
 from .models import Event
@@ -34,4 +35,5 @@ urlpatterns = [
     ),
     distill_path("past-meetups/", views.past_meetups, name="past-meetups"),
     distill_path("rules/", views.rules, name="rules"),
+    distill_path("feed/", LatestMeetupsFeed(), name="meetup-feed"),
 ]
