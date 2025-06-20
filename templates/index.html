@@ -41,6 +41,42 @@
         </div>
       </section>
 
+      <!-- PyCon Lottery Widget -->
+      <section id="pycon-lottery" class="mb-16 flex justify-center">
+        <div class="lottery-widget bg-white rounded-3xl p-6 shadow-2xl max-w-md w-full mx-4 backdrop-blur-lg" style="background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.95) 100%);">
+          <div class="text-center">
+            <div id="lottery-initial" class="lottery-screen">
+              <h3 class="text-xl font-bold text-python-blue mb-4">🎫 Κλήρωση εισιτηρίων για PyCon</h3>
+              <button id="lottery-button" class="lottery-btn bg-gradient-to-r from-python-blue to-blue-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 active:scale-95">
+                Δες τον νικητή
+              </button>
+            </div>
+            
+            <div id="lottery-loading" class="lottery-screen hidden">
+              <div class="loading-spinner mx-auto mb-4"></div>
+              <p class="text-gray-600 text-lg">Φορτώνει...</p>
+            </div>
+            
+            <div id="lottery-winner" class="lottery-screen hidden">
+              <div class="text-4xl mb-4">🎉</div>
+              <h4 class="text-lg font-semibold text-python-blue mb-2">The winner is</h4>
+              <p class="text-2xl font-bold text-gray-800 mb-4">Alexandros Chariton</p>
+              <button id="next-run-button" class="lottery-btn bg-gradient-to-r from-python-yellow to-yellow-400 text-gray-800 px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 active:scale-95">
+                Move to next run
+              </button>
+            </div>
+            
+            <div id="lottery-error" class="lottery-screen hidden">
+              <div class="text-4xl mb-4">❌</div>
+              <p id="error-message" class="text-lg text-red-600 font-semibold mb-4"></p>
+              <button id="restart-button" class="lottery-btn bg-gradient-to-r from-gray-500 to-gray-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 active:scale-95">
+                Try Again
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {% if future_event %}
       <section id="next-meetup" class="mb-16">
       <h2 class="text-3xl font-bold mb-4 sm:mb-6 py-accent">Επόμενο μίτάπ</h2>
@@ -206,6 +242,72 @@
             });
           }
         });
+
+        // PyCon Lottery Widget Functionality
+        const lotteryButton = document.getElementById('lottery-button');
+        const nextRunButton = document.getElementById('next-run-button');
+        const restartButton = document.getElementById('restart-button');
+
+        if (lotteryButton) {
+          lotteryButton.addEventListener('click', function() {
+            showScreen('lottery-loading');
+            
+            // Show loading for 2-3 seconds
+            setTimeout(function() {
+              showScreen('lottery-winner');
+            }, 2500);
+          });
+        }
+
+        if (nextRunButton) {
+          nextRunButton.addEventListener('click', function() {
+            showRandomError();
+          });
+        }
+
+        if (restartButton) {
+          restartButton.addEventListener('click', function() {
+            showScreen('lottery-initial');
+          });
+        }
+
+        function showScreen(screenId) {
+          // Hide all screens
+          const screens = document.querySelectorAll('.lottery-screen');
+          screens.forEach(screen => {
+            screen.classList.add('hidden');
+          });
+          
+          // Show target screen
+          setTimeout(() => {
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+              targetScreen.classList.remove('hidden');
+            }
+          }, 100);
+        }
+
+        function showRandomError() {
+          const errors = [
+            "ERROR 404: Winner not found 🤷‍♂️",
+            "ERROR 500: Server crashed from excitement 💥",
+            "ERROR 418: I'm a teapot, not a lottery machine ☕",
+            "ERROR 429: Too many winners, rate limited 🚫",
+            "CRITICAL: Database full of fake entries 📊",
+            "WARNING: Lottery machine gained consciousness 🤖",
+            "ERROR 503: Service unavailable (probably napping) 😴",
+            "PANIC: All winners escaped to PyCon 🏃‍♂️",
+            "ERROR 200: Success (but that's suspicious) 🤔",
+            "FATAL: Alexandros won again somehow 🎯"
+          ];
+          
+          const randomError = errors[Math.floor(Math.random() * errors.length)];
+          const errorMessage = document.getElementById('error-message');
+          if (errorMessage) {
+            errorMessage.textContent = randomError;
+          }
+          showScreen('lottery-error');
+        }
       });
     </script>
 {% endblock %}
