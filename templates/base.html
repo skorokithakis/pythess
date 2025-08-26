@@ -175,6 +175,11 @@
           <!-- Desktop menu -->
           <ul class="hidden sm:flex space-x-6">
             <li>
+              <a href="{% url "past-meetups" %}" class="hover:text-python-yellow transition-colors">
+               Μίτάψ 
+              </a>
+            </li>
+            <li>
               <a href="{% url "people" %}" class="hover:text-python-yellow transition-colors">
                 Παρουσιαστές
               </a>
@@ -194,6 +199,11 @@
 
         <!-- Mobile menu (hidden by default) -->
         <ul class="nav-menu hidden mt-4" id="mobile-menu">
+          <li>
+            <a href="{% url "past-meetups" %}" class="block py-2 hover:text-python-yellow transition-colors">
+              Μίτάψ 
+            </a>
+          </li>
           <li>
             <a href="{% url "people" %}" class="block py-2 hover:text-python-yellow transition-colors">
               Παρουσιαστές
