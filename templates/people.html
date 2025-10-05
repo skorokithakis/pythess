@@ -2,7 +2,7 @@
 
 {% load markdownify %}
 
-{% block title %}{{ person.name }}{% endblock title %}
+{% block title %}Τα καμάρια μας{% endblock title %}
 
 {% block content %}
 <section id="next-meetup" class="mb-16">
@@ -14,20 +14,19 @@
     </div>
     <div class="p-6 meetup-description">
         <div class="text-gray-700 mb-4 event-description">
-            <p class="text-gray-600">
+            <p class="text-gray-600 mb-6">
                 Εδώ είναι όλα τα άτομα που είχαν την υπέρτατη τιμή να παρουσιάσουν κάτι
                 στο καλύτερο μιτάπ του κόσμου. Βέβαια, σχεδόν όλοι το αναγράφουν στο
                 βιογραφικό τους, αλλά είπαμε να το βάλουμε κι εδώ.
             </p>
-            <ul class="list-disc ml-5 text-gray-600 space-y-3">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {% for person in people %}
-              <li>
-              <p>
-                <a href="{{ person.get_absolute_url }}">{{ person.name }}</a>
-              </p>
-              </li>
-              {% endfor %}
-           </ul>
+                <a href="{{ person.get_absolute_url }}" class="flex flex-col items-center text-center border-2 border-gray-200 rounded-lg p-4 hover:border-py-accent hover:shadow-md transition-all">
+                    {% include "person_photo.html" with person=person size_class="w-32 h-32" additional_class=" border-2 border-gray-300" %}
+                    <p class="mt-2 text-gray-700 font-medium text-lg">{{ person.name }}</p>
+                </a>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>
