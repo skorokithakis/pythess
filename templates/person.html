@@ -31,7 +31,7 @@
             <p class="text-gray-600">
             {% if person.gender == "male" %}Ο{% else %}Η{% endif %} {{ person.name }} μάς έχει παρουσιάσει τα εξής:
             </p>
-            <section id="presentations" class="mb-16">
+            <section id="presentations">
             <div class="grid gap-6">
                 {% for presentation in person.presentations.all %}
                 {% include "presentation.html" with presentation=presentation %}
