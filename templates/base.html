@@ -160,7 +160,7 @@
       }
     </style>
   </head>
-  <body class="bg-gray-50 text-gray-900 font-['Inter',sans-serif]">
+  <body class="bg-gray-50 text-gray-900 font-['Inter',sans-serif] min-h-screen flex flex-col">
     <header class="bg-python-blue text-white shadow-md">
       <nav class="container mx-auto px-4 py-4">
         <div class="flex justify-between items-center">
@@ -238,7 +238,7 @@
       });
     </script>
 
-    <main class="container mx-auto px-4 py-12">
+    <main class="container mx-auto px-4 py-12 flex-grow">
     {% block content %}
     {% endblock %}
     </main>
