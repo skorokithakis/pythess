@@ -35,6 +35,7 @@ urlpatterns = [
     ),
     distill_path("past-meetups/", views.past_meetups, name="past-meetups"),
     distill_path("rules/", views.rules, name="rules"),
+    distill_path("splash/", views.splash, name="splash"),
     distill_path("404.html", views.page_not_found, name="404"),
     distill_path("feed/", LatestMeetupsFeed(), name="meetup-feed"),
 ]

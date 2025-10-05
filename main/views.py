@@ -90,3 +90,25 @@ def meetup_ics(request, slug):
 
 def page_not_found(request):
     return render(request, "404.html")
+
+
+def splash(request):
+    """Full-screen splash page with QR codes for meetup start."""
+    qr_items = [
+        {
+            "url": "https://www.pythess.org",
+            "icon": "fa-brands fa-python",
+            "color": "#ffcc3b",
+        },
+        {
+            "url": "https://discord.gg/U9bRsHfvBy",
+            "icon": "fa-brands fa-discord",
+            "color": "#5865F2",
+        },
+        # {
+        #    "url": "https://www.meetup.com/pythess/",
+        #    "icon": "fa-brands fa-meetup",
+        #    "color": "#ED1C40",
+        # },
+    ]
+    return render(request, "splash.html", {"qr_items": qr_items})

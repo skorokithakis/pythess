@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyThess links</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            width: calc(100vw - 4rem);
+            height: calc(100vh - 4rem);
+            justify-items: center;
+            align-items: center;
+            padding: 0;
+        }
+
+        .qr-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            width: 100%;
+            height: 100%;
+        }
+
+        .qr-code {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    {{ qr_items|json_script:"qr-items-data" }}
+    <div class="container" id="qr-container"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        const qrItems = JSON.parse(document.getElementById('qr-items-data').textContent);
+        const container = document.getElementById('qr-container');
+
+        function calculateQRSize() {
+            const itemCount = qrItems.length;
+            const rows = Math.ceil(itemCount / 2);
+
+            const containerWidth = window.innerWidth - 64;
+            const containerHeight = window.innerHeight - 64;
+            const isLandscape = window.innerWidth > window.innerHeight;
+            const shouldUseHorizontalLayout = isLandscape && itemCount > 2;
+
+            const gridGap = 48;
+            const iconSpace = shouldUseHorizontalLayout ? 200 : 150;
+
+            const availableWidth = (containerWidth - gridGap) / 2 - (shouldUseHorizontalLayout ? iconSpace : 0);
+            const availableHeight = (containerHeight - (rows - 1) * gridGap) / rows - (shouldUseHorizontalLayout ? 0 : iconSpace);
+
+            const size = Math.min(availableWidth, availableHeight, 600);
+            const iconSize = Math.max(size * 0.15, 60);
+
+            return { qrSize: Math.floor(size), iconSize: Math.floor(iconSize), horizontal: shouldUseHorizontalLayout };
+        }
+
+        function renderQRCodes() {
+            container.innerHTML = '';
+            const { qrSize, iconSize, horizontal } = calculateQRSize();
+
+            qrItems.forEach((item, index) => {
+                const qrItemDiv = document.createElement('div');
+                qrItemDiv.className = 'qr-item';
+                qrItemDiv.style.flexDirection = horizontal ? 'row' : 'column';
+                qrItemDiv.style.gap = horizontal ? '3rem' : '2rem';
+
+                const qrCodeDiv = document.createElement('div');
+                qrCodeDiv.className = 'qr-code';
+                qrCodeDiv.id = `qr-${index}`;
+
+                const logoDiv = document.createElement('div');
+                logoDiv.className = 'logo';
+                logoDiv.style.fontSize = `${iconSize}px`;
+
+                const iconElement = document.createElement('i');
+                iconElement.className = item.icon;
+                iconElement.style.color = item.color;
+                logoDiv.appendChild(iconElement);
+
+                qrItemDiv.appendChild(qrCodeDiv);
+                qrItemDiv.appendChild(logoDiv);
+                container.appendChild(qrItemDiv);
+
+                new QRCode(qrCodeDiv, {
+                    text: item.url,
+                    width: qrSize,
+                    height: qrSize,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            });
+        }
+
+        renderQRCodes();
+
+        window.addEventListener('resize', renderQRCodes);
+    </script>
+</body>
+</html>
