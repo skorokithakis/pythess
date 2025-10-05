@@ -1,6 +1,7 @@
 import base64
 import io
 import os
+import random
 import subprocess
 from pathlib import Path
 
@@ -32,7 +33,89 @@ def generate_person_image(person: Person, force: bool = False) -> None:
 
     client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-    prompt = f"""Please generate a realistic-looking photo of a {person.gender} humanoid Python snake of a presenter in my Python meetup called "{person.name}". The image should not be unflattering to the person. Do not include the person's name in the image. Dress the Python up in various plausible Silicon-Valley-tech-worker clothes. Give it a colorful backdrop of everyday locations, e.g. a street, a home, an office, a bus, or whatever other random location you can think of. Choose randomly between a headshot, an office shot, an action shot, or various other random circumstances that tech workers find themselves into, in work or in life. Make it slightly unexpected."""
+    # Random elements for variety.
+    colors = [
+        "emerald green",
+        "golden yellow",
+        "chocolate brown",
+        "jet black",
+        "bright orange",
+        "copper",
+        "olive green",
+        "tan",
+        "ruby red",
+        "sapphire blue",
+        "pearl white",
+        "charcoal gray",
+        "burgundy",
+        "teal",
+        "lime green",
+    ]
+
+    accessories = [
+        "a stylish hat",
+        "modern glasses",
+        "a colorful scarf",
+        "a smart watch",
+        "a bow tie",
+        "earrings",
+        "wireless headphones",
+        "a bandana",
+        "a baseball cap",
+        "sunglasses",
+        "a beanie",
+        "a tie",
+        "a pocket square",
+        "a necklace",
+        "a backpack",
+    ]
+
+    backgrounds = [
+        "a busy city street",
+        "a cozy home office",
+        "a modern corporate office",
+        "a city bus",
+        "a trendy coffee shop",
+        "a public library",
+        "a sunny park",
+        "a coworking space",
+        "a conference room",
+        "a bookstore",
+        "a tech startup office",
+        "a university campus",
+        "a subway station",
+        "a rooftop terrace",
+        "a coding bootcamp classroom",
+    ]
+
+    clothes = [
+        "blue jeans and a gray t-shirt",
+        "black jeans and a white t-shirt",
+        "dark jeans and a blue t-shirt",
+        "jeans and a red t-shirt",
+        "jeans and a green t-shirt",
+        "jeans and a black t-shirt",
+        "blue jeans and a navy t-shirt",
+        "jeans and a purple t-shirt",
+        "dark jeans and a maroon t-shirt",
+        "jeans and a yellow t-shirt",
+        "black jeans and a dark green t-shirt",
+        "blue jeans and an orange t-shirt",
+        "jeans and a brown t-shirt",
+        "dark jeans and a teal t-shirt",
+        "jeans and a plain white shirt",
+        "a button-down shirt and slacks",
+        "a blazer and dress pants",
+        "a suit jacket and trousers",
+    ]
+
+    snake_color = random.choice(colors)
+    accessory = random.choice(accessories)
+    background = random.choice(backgrounds)
+    outfit = random.choice(clothes)
+
+    prompt = f"""Please generate a realistic-looking photo of a {person.gender} {snake_color} humanoid Python snake of a member of my Python meetup called "{person.name}". The image should not be unflattering to the person. Do not include the person's name in the image. Dress the Python in {outfit}. The setting is {background}, make it look like something that tech workers find themselves into, in work or in life. Make it slightly unexpected. Give the snake {accessory}."""
+    print(prompt)
 
     response = client.images.generate(
         model="gpt-image-1",
