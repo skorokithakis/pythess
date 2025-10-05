@@ -50,6 +50,16 @@ def generate_person_image(person: Person, force: bool = False) -> None:
         "burgundy",
         "teal",
         "lime green",
+        "bronze",
+        "silver",
+        "platinum",
+        "coral",
+        "lavender",
+        "turquoise",
+        "amber",
+        "crimson",
+        "indigo",
+        "forest green",
     ]
 
     accessories = [
@@ -68,6 +78,16 @@ def generate_person_image(person: Person, force: bool = False) -> None:
         "a pocket square",
         "a necklace",
         "a backpack",
+        "a tablet",
+        "a messenger bag",
+        "a lanyard",
+        "a smart ring",
+        "a tote bag",
+        "a bracelet",
+        "a badge pin",
+        "a laptop bag",
+        "a fitness tracker",
+        "noise-canceling earbuds",
     ]
 
     backgrounds = [
@@ -86,6 +106,16 @@ def generate_person_image(person: Person, force: bool = False) -> None:
         "a subway station",
         "a rooftop terrace",
         "a coding bootcamp classroom",
+        "a hackathon venue",
+        "a maker space",
+        "a food truck area",
+        "a bike path",
+        "an airport lounge",
+        "a hotel lobby",
+        "a train car",
+        "a climbing gym",
+        "a game cafe",
+        "a beer garden",
     ]
 
     clothes = [
@@ -107,6 +137,18 @@ def generate_person_image(person: Person, force: bool = False) -> None:
         "a button-down shirt and slacks",
         "a blazer and dress pants",
         "a suit jacket and trousers",
+        "a hoodie and jeans",
+        "a flannel shirt and chinos",
+        "a polo shirt and khakis",
+        "a cardigan and dark jeans",
+        "a denim jacket and black pants",
+        "a leather jacket and jeans",
+        "a sweater and corduroy pants",
+        "a bomber jacket and slim pants",
+        "a henley shirt and cargo pants",
+        "a vest and dress shirt",
+        "a turtleneck and slacks",
+        "joggers and a sweatshirt",
     ]
 
     snake_color = random.choice(colors)
