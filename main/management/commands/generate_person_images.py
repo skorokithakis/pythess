@@ -32,7 +32,7 @@ def generate_person_image(person: Person, force: bool = False) -> None:
 
     client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-    prompt = f"""Please generate a realistic-looking headshot of a {person.gender} humanoid Python snake of a presenter in my Python meetup called "{person.name}". The image should not be unflattering to the person. Do not include the person's name in the image. Dress the Python up in various plausible Silicon-Valley-tech-worker clothes. Give it a colorful backdrop of everyday locations, e.g. a street, a home, an office, a bus, or whatever other random location you can think of."""
+    prompt = f"""Please generate a realistic-looking photo of a {person.gender} humanoid Python snake of a presenter in my Python meetup called "{person.name}". The image should not be unflattering to the person. Do not include the person's name in the image. Dress the Python up in various plausible Silicon-Valley-tech-worker clothes. Give it a colorful backdrop of everyday locations, e.g. a street, a home, an office, a bus, or whatever other random location you can think of. Choose randomly between a headshot, an office shot, an action shot, or various other random circumstances that tech workers find themselves into, in work or in life. Make it slightly unexpected."""
 
     response = client.images.generate(
         model="gpt-image-1",
