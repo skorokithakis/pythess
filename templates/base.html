@@ -4,12 +4,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="PyThess - Ένα σοβαρό μιτάπ για την Python στη Θεσσαλονίκη">
+    <meta name="description" content="PyThess - Ένα ωραίο μιτάπ Python στη Θεσσαλονίκη, μα τι καλό είναι">
     <meta name="theme-color" content="#306998">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" type="image/png" href="{% static 'images/favicon/favicon-96x96.png' %}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon/favicon.svg' %}" />
+    <link rel="shortcut icon" href="{% static 'images/favicon/favicon.ico' %}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-touch-icon.png' %}" />
+    <meta name="apple-mobile-web-app-title" content="PyThess" />
+    <link rel="manifest" href="{% static 'images/favicon/site.webmanifest' %}" />
     <title>{% block title %}Καλησπέρα{% endblock %} - PyThess</title>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:title" content="PyThess - Ένα σοβαρό μιτάπ Python στη Θεσσαλονίκη">
+    <meta property="og:description" content="Μα τι καλό μιτάπ, δεν είναι πολύ ωραίο; Είναι.">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo.png' %}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:url" content="{{ request.build_absolute_uri }}">
+    <meta property="twitter:title" content="PyThess - Ένα σοβαρό μιτάπ Python στη Θεσσαλονίκη">
+    <meta property="twitter:description" content="Μα τι καλό μιτάπ, δεν είναι πολύ ωραίο; Είναι.">
+    <meta property="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo.png' %}">
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
 
     <script>
@@ -164,7 +184,8 @@
     <header class="bg-python-blue text-white shadow-md">
       <nav class="container mx-auto px-4 py-4">
         <div class="flex justify-between items-center">
-          <a href="/" class="text-2xl font-bold">
+          <a href="/" class="text-2xl font-bold flex items-center gap-2">
+            <img src="{% static 'images/logo.png' %}" alt="PyThess logo" class="h-8" />
             Py<span class="text-python-yellow">Thess</span></a>
 
           <!-- Mobile menu button -->
@@ -176,7 +197,7 @@
           <ul class="hidden sm:flex space-x-6">
             <li>
               <a href="{% url "past-meetups" %}" class="hover:text-python-yellow transition-colors">
-               Μίτάψ 
+               Μίτάψ
               </a>
             </li>
             <li>
@@ -201,7 +222,7 @@
         <ul class="nav-menu hidden mt-4" id="mobile-menu">
           <li>
             <a href="{% url "past-meetups" %}" class="block py-2 hover:text-python-yellow transition-colors">
-              Μίτάψ 
+              Μίτάψ
             </a>
           </li>
           <li>
