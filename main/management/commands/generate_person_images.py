@@ -160,7 +160,7 @@ def generate_person_image(person: Person, force: bool = False) -> None:
     print(prompt)
 
     response = client.images.generate(
-        model="gpt-image-1",
+        model="gpt-image-1-mini",
         prompt=prompt,
         size="1024x1024",
         n=1,
