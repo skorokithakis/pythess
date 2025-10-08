@@ -162,6 +162,8 @@ def generate_person_image(person: Person, force: bool = False) -> None:
     response = client.images.generate(
         model="gpt-image-1-mini",
         prompt=prompt,
+        output_format="jpeg",
+        quality="high",
         size="1024x1024",
         n=1,
     )
