@@ -42,7 +42,7 @@
       </section>
 
       {% if future_event %}
-      <section id="next-meetup" class="mb-16">
+      <section id="next-meetup" class="mb-16" data-event-date="{{ future_event.date_time|date:'Y-m-d' }}">
       <h2 class="text-3xl font-bold mb-4 sm:mb-6 py-accent">Επόμενο μίτάπ</h2>
       <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
           <div class="bg-py-accent text-white p-4 sm:p-6">
@@ -88,6 +88,26 @@
           </div>
       </div>
       </section>
+      <script>
+        // Hide the meetup section if the event day has passed (runs inline to prevent FOUC)
+        (function() {
+          var meetupSection = document.getElementById('next-meetup');
+          if (meetupSection) {
+            var eventDateStr = meetupSection.getAttribute('data-event-date');
+            var eventDate = new Date(eventDateStr);
+            var today = new Date();
+
+            // Set both dates to midnight for day-level comparison
+            today.setHours(0, 0, 0, 0);
+            eventDate.setHours(0, 0, 0, 0);
+
+            // Hide if today is after the event day
+            if (today > eventDate) {
+              meetupSection.style.display = 'none';
+            }
+          }
+        })();
+      </script>
       {% endif %}
 
       {% if old_events %}
