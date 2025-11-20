@@ -9,7 +9,7 @@ class LatestMeetupsFeed(Feed):
     description = "Τα τελευταία μιτάπ του PyThess"
 
     def items(self):
-        return Event.objects.all()[:10]
+        return Event.objects.order_by("-date_time")[:10]
 
     def item_title(self, item):
         return item.title
@@ -22,3 +22,6 @@ class LatestMeetupsFeed(Feed):
 
     def item_pubdate(self, item):
         return item.date_time
+
+    def item_guid(self, item):
+        return item.slug

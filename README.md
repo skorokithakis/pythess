@@ -21,3 +21,4 @@ Then navigate to http://localhost:8000 to see a website that could have been a G
 - Static site generation that creates 500 HTML files for 12 events
 - Events named after Greek dishes, which started as a joke and now we're stuck with it
 - A presentations archive that proves yes, someone did give a talk about Excel automation in 2019 and we all had to sit through it
+- An RSS feed of meetups at `/feed/`, for those who'd rather subscribe than talk to us

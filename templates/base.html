@@ -15,6 +15,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-touch-icon.png' %}" />
     <meta name="apple-mobile-web-app-title" content="PyThess" />
     <link rel="manifest" href="{% static 'images/favicon/site.webmanifest' %}" />
+    <link rel="alternate" type="application/rss+xml" title="PyThess meetups" href="{% url "meetup-feed" %}" />
     <title>{% block title %}Καλησπέρα{% endblock %} - PyThess</title>
 
     <!-- Open Graph / Facebook -->
@@ -287,6 +288,11 @@
                class="hover:text-python-yellow transition-colors"
                title="Ο σέρβερ μας στο Discord">
               <i class="fa-brands fa-discord"></i>
+            </a>
+            <a href="{% url "meetup-feed" %}"
+               class="hover:text-python-yellow transition-colors"
+               title="RSS feed για τα μιτάψ">
+              <i class="fa-solid fa-rss"></i>
             </a>
           </div>
         </div>
