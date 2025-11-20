@@ -110,6 +110,82 @@
       </script>
       {% endif %}
 
+      <section
+        id="mailing-list"
+        class="mb-16 bg-python-yellow/20 border border-python-yellow rounded-lg shadow-md"
+      >
+        <div class="p-6 sm:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div class="md:max-w-xl">
+            <p class="text-sm uppercase tracking-wide text-python-blue font-semibold mb-2">
+              Μιταψ
+            </p>
+            <h2 class="text-2xl sm:text-3xl font-bold text-python-blue mb-3">
+              Γραφτείτε να μαθαίνετε πότε έχουμε
+            </h2>
+            <p class="text-gray-700">
+              Θα σας στείλουμε ένα mail για να γραφτείτε. Αν δεν το δείτε, πήγε σπαμ.
+            </p>
+          </div>
+          <div class="bg-white w-full md:w-auto rounded-lg shadow-sm p-5 border border-python-yellow/50">
+            <form
+              id="mailing-list-form"
+              class="space-y-3"
+              method="post"
+              action="https://listmonk.home.stavros.io/subscription/form"
+            >
+              <input type="hidden" name="nonce" value="" />
+              <input type="hidden" name="name" value="" />
+              <input
+                type="hidden"
+                name="l"
+                value="056fe354-38ce-48d6-90f0-39c29f9f0c09"
+              />
+              <label class="block text-sm font-semibold text-python-blue" for="newsletter-email">
+                Email
+              </label>
+              <input
+                id="newsletter-email"
+                name="email"
+                type="email"
+                required
+                placeholder="you@example.com"
+                class="w-full rounded-md border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-python-blue focus:outline-none"
+              />
+              <button
+                type="submit"
+                class="w-full inline-flex items-center justify-center px-4 py-2 rounded-md text-white bg-py-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-python-blue transition disabled:opacity-70"
+              >
+                <svg
+                  class="h-5 w-5 mr-2 hidden animate-spin"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+                <span class="button-text">Άντε</span>
+              </button>
+              <p class="text-sm text-gray-600" id="mailing-list-message"></p>
+            </form>
+            <div
+              id="mailing-list-success"
+              class="hidden bg-green-50 border border-green-200 text-green-800 rounded-md p-4"
+            >
+              <p class="font-semibold mb-1">Ευχαριστούμε για την εγγραφή!</p>
+              <p class="text-sm">
+                Στείλαμε email επιβεβαίωσης. Παρακαλούμε ελέγξτε και τον φάκελο spam ώστε να
+                ολοκληρώσετε την εγγραφή σας.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {% if old_events %}
       <section id="past-meetups" class="mb-16">
       <h2 class="text-3xl font-bold mb-4 text-python-blue">
@@ -181,6 +257,44 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        var mailingListForm = document.getElementById("mailing-list-form");
+        if (mailingListForm) {
+          var submitButton = mailingListForm.querySelector("button");
+          var spinner = submitButton.querySelector("svg");
+          var buttonText = submitButton.querySelector(".button-text");
+          var successBox = document.getElementById("mailing-list-success");
+          var message = document.getElementById("mailing-list-message");
+
+          mailingListForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            message.textContent = "";
+            submitButton.disabled = true;
+            spinner.classList.remove("hidden");
+            buttonText.textContent = "Εγγραφή...";
+
+            var formData = new FormData(mailingListForm);
+
+            fetch(mailingListForm.action, {
+              method: "POST",
+              body: formData,
+            })
+              .then(function (response) {
+                if (!response.ok) {
+                  throw new Error("Subscription failed");
+                }
+
+                mailingListForm.classList.add("hidden");
+                successBox.classList.remove("hidden");
+              })
+              .catch(function () {
+                message.textContent = "Κάτι πήγε στραβά. Δοκιμάστε ξανά σε λίγο.";
+                submitButton.disabled = false;
+                spinner.classList.add("hidden");
+                buttonText.textContent = "Εγγραφή";
+              });
+          });
+        }
+
         // Select all elements with the "event-description" class
         var descriptions = document.querySelectorAll(".event-description");
 
