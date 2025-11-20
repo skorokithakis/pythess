@@ -1,5 +1,8 @@
 from django.contrib.syndication.views import Feed
 from django.urls import reverse_lazy
+
+from markdownify.templatetags.markdownify import markdownify
+
 from .models import Event
 
 
@@ -15,7 +18,7 @@ class LatestMeetupsFeed(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.description
+        return markdownify(item.description)
 
     def item_link(self, item):
         return item.get_absolute_url()
