@@ -4,7 +4,7 @@
 /assets/*
   Cache-Control: public, s-maxage=31556926, max-age=31556926
 
-/*/ics
+/meetup/*/ics
   Content-Type: text/calendar
 
 /feed/*
