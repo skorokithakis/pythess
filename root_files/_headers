@@ -4,6 +4,9 @@
 /assets/*
   Cache-Control: public, s-maxage=31556926, max-age=31556926
 
+*/ics
+  Content-Type: text/calendar
+
 /feed/*
   Content-Type: application/xml
 
