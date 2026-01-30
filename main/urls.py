@@ -28,7 +28,7 @@ urlpatterns = [
         "meetup/<slug:slug>/", views.meetup, name="meetup", distill_func=get_all_events
     ),
     distill_path(
-        "meetup/<slug:slug>/ics/",
+        "meetup/<slug:slug>.ics",
         views.meetup_ics,
         name="meetup-ics",
         distill_func=get_all_events,
