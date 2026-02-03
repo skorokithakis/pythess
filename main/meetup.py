@@ -1,4 +1,5 @@
 """Meetup.com API integration for publishing events."""
+
 import requests
 from django.utils import timezone
 

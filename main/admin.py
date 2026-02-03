@@ -43,6 +43,9 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ("date_time", "venue")
     search_fields = ("title", "description")
 
+    class Media:
+        css = {"all": ["admin/event_admin.css"]}
+
     def get_urls(self):
         """Add custom URL for publishing event to Meetup."""
         urls = super().get_urls()
