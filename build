@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-# The CI only caches ~/.npm, so we use that for uv's cache as well.
-if [ "$CI" = "true" ]; then
-    echo "We're on CI, changing cache dir name"
-    export UV_CACHE_DIR=~/.npm
-fi
-
 uv run manage.py distill-local --collectstatic --quiet --force output
 cp root_files/* output/
 
