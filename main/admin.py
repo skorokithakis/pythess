@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.urls import path
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 
 from .meetup import publish_event_to_meetup
 from .models import Event
@@ -78,9 +79,13 @@ class EventAdmin(admin.ModelAdmin):
             event.meetup_com_id = meetup_id
             event.save()
 
+            meetup_url = f"https://www.meetup.com/pythess/events/{meetup_id}/"
             messages.success(
                 request,
-                f"Event '{event.title}' successfully published to Meetup (ID: {meetup_id}).",
+                mark_safe(
+                    f"Event '{event.title}' successfully published to Meetup: "
+                    f'<a href="{meetup_url}" target="_blank">{meetup_url}</a>'
+                ),
             )
         except Exception as e:
             messages.error(
