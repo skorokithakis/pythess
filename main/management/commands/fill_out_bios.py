@@ -63,7 +63,7 @@ Now do one like the example, for a speaker called "{name}". Don't add Markdown h
 and add two newlines between paragraphs.
 """
     message = client.messages.create(
-        model="claude-sonnet-4-5",
+        model="claude-sonnet-4-6",
         max_tokens=4000,
         temperature=1,
         system="You are a funny biography writer, writing funny (but not offensive) speaker bios.",
