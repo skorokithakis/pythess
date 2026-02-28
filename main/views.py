@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpRequest
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -50,7 +51,11 @@ def presentations(request):
     return render(request, "presentations.html", {"presentations": presentations})
 
 
-def rules(request):
+def present(request: HttpRequest) -> HttpResponse:
+    return render(request, "present.html")
+
+
+def rules(request: HttpRequest) -> HttpResponse:
     return render(request, "rules.html")
 
 
