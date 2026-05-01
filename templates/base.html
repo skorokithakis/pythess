@@ -217,6 +217,13 @@
                 Κανόνες
               </a>
             </li>
+            {% if request.user.is_staff %}
+            <li>
+              <a href="{% url "create-meetup" %}" class="hover:text-python-yellow transition-colors">
+                Νέο μιτάπ
+              </a>
+            </li>
+            {% endif %}
             <li>
               <a href="https://www.duolingo.com/course/el/en/Learn-Greek" title="Don't speak Greek?" target="_blank" rel="noopener" class="hover:text-python-yellow transition-colors">
                 🇬🇧
@@ -247,6 +254,13 @@
               Κανόνες
             </a>
           </li>
+          {% if request.user.is_staff %}
+          <li>
+            <a href="{% url "create-meetup" %}" class="block py-2 hover:text-python-yellow transition-colors">
+              Νέο μιτάπ
+            </a>
+          </li>
+          {% endif %}
           <li>
             <a href="https://www.duolingo.com/course/el/en/Learn-Greek" title="Don't speak Greek?" target="_blank" rel="noopener" class="block py-2 hover:text-python-yellow transition-colors">
               🇬🇧

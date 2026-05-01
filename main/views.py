@@ -1,15 +1,22 @@
+import datetime
 from datetime import timedelta
 
 from django.contrib.sites.shortcuts import get_current_site
+from django.db import IntegrityError
+from django.db import transaction
+from django.http import Http404
 from django.http import HttpRequest
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.text import slugify
 from ics import Calendar
 from ics import Event as IcsEvent
 
+from main.forms import CreateMeetupForm
 from main.models import Event
 from main.models import Person
 from main.models import Presentation
@@ -117,3 +124,65 @@ def splash(request):
         # },
     ]
     return render(request, "splash.html", {"qr_items": qr_items})
+
+
+def create_meetup(request: HttpRequest) -> HttpResponse:
+    """Staff-only form to create an Event with 1–3 Presentations in one submit."""
+    if not request.user.is_staff:
+        raise Http404
+
+    if request.method == "POST":
+        form = CreateMeetupForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            slug = slugify(data["title"])
+            date_time = timezone.make_aware(
+                datetime.datetime.combine(data["date"], data["time"])
+            )
+            try:
+                with transaction.atomic():
+                    event = Event.objects.create(
+                        title=data["title"],
+                        slug=slug,
+                        description=data["description"],
+                        date_time=date_time,
+                        venue=data["venue"],
+                    )
+
+                    slots = [
+                        (
+                            1,
+                            data["slot1_name"],
+                            data["slot1_presenters"],
+                            data.get("slot1_url", ""),
+                        ),
+                        (
+                            2,
+                            data.get("slot2_name", ""),
+                            data.get("slot2_presenters"),
+                            data.get("slot2_url", ""),
+                        ),
+                        (
+                            3,
+                            data.get("slot3_name", ""),
+                            data.get("slot3_presenters"),
+                            data.get("slot3_url", ""),
+                        ),
+                    ]
+                    for order, name, presenter, url in slots:
+                        if name:
+                            presentation = Presentation.objects.create(
+                                name=name,
+                                url=url or "",
+                                event=event,
+                                order=order,
+                            )
+                            presentation.presenters.add(presenter)
+
+                return redirect(reverse("admin:main_event_change", args=[event.pk]))
+            except IntegrityError:
+                form.add_error(None, "Υπάρχει ήδη μιτάπ με αυτό το slug.")
+    else:
+        form = CreateMeetupForm()
+
+    return render(request, "create_meetup.html", {"form": form})

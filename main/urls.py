@@ -1,4 +1,6 @@
+from django.urls import path
 from django_distill import distill_path
+
 from .feeds import LatestMeetupsFeed
 
 from . import views
@@ -39,4 +41,5 @@ urlpatterns = [
     distill_path("splash/", views.splash, name="splash"),
     distill_path("404.html", views.page_not_found, name="404"),
     distill_path("feed/", LatestMeetupsFeed(), name="meetup-feed"),
+    path("create-meetup/", views.create_meetup, name="create-meetup"),
 ]

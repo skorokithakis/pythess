@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+
+{% block title %}Νέο μιτάπ{% endblock title %}
+
+{% block content %}
+<section class="mb-16">
+  <div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <div class="bg-py-accent text-white p-6">
+      <h3 class="text-2xl font-bold">Νέο μιτάπ</h3>
+    </div>
+    <div class="p-6">
+
+      {% if form.non_field_errors %}
+      <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+        {% for error in form.non_field_errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <form method="post" id="create-meetup-form">
+        {% csrf_token %}
+
+        <h4 class="text-lg font-semibold text-python-blue mb-4">Στοιχεία μιτάπ</h4>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.title.id_for_label }}">
+            Τίτλος <span class="text-red-500">*</span>
+          </label>
+          {% if form.title.errors %}<p class="text-red-600 text-sm mb-1">{{ form.title.errors|join:", " }}</p>{% endif %}
+          {{ form.title }}
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.description.id_for_label }}">
+            Περιγραφή <span class="text-red-500">*</span>
+          </label>
+          <p class="text-xs text-gray-500 mb-1">Υποστηρίζεται markdown.</p>
+          {% if form.description.errors %}<p class="text-red-600 text-sm mb-1">{{ form.description.errors|join:", " }}</p>{% endif %}
+          {{ form.description }}
+          <div id="description-preview"
+               class="mt-2 p-3 bg-gray-50 border border-gray-200 rounded prose prose-sm max-w-none text-gray-700 hidden">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.date.id_for_label }}">
+              Ημερομηνία <span class="text-red-500">*</span>
+            </label>
+            {% if form.date.errors %}<p class="text-red-600 text-sm mb-1">{{ form.date.errors|join:", " }}</p>{% endif %}
+            {{ form.date }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.time.id_for_label }}">
+              Ώρα <span class="text-red-500">*</span>
+            </label>
+            {% if form.time.errors %}<p class="text-red-600 text-sm mb-1">{{ form.time.errors|join:", " }}</p>{% endif %}
+            {{ form.time }}
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.venue.id_for_label }}">
+            Χώρος <span class="text-red-500">*</span>
+            <a href="{% url 'admin:main_venue_add' %}" target="_blank"
+               class="ml-2 text-xs text-python-blue hover:underline font-normal">νέος</a>
+          </label>
+          {% if form.venue.errors %}<p class="text-red-600 text-sm mb-1">{{ form.venue.errors|join:", " }}</p>{% endif %}
+          {{ form.venue }}
+        </div>
+
+        <h4 class="text-lg font-semibold text-python-blue mb-4">Παρουσιάσεις</h4>
+
+        <!-- Slot 1 (required) -->
+        <div class="mb-6 p-4 border border-gray-200 rounded-lg">
+          <h5 class="font-medium text-gray-800 mb-3">Παρουσίαση 1 <span class="text-red-500">*</span></h5>
+          <div class="mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.slot1_name.id_for_label }}">
+              Τίτλος <span class="text-red-500">*</span>
+            </label>
+            {% if form.slot1_name.errors %}<p class="text-red-600 text-sm mb-1">{{ form.slot1_name.errors|join:", " }}</p>{% endif %}
+            {{ form.slot1_name }}
+          </div>
+          <div class="mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.slot1_presenters.id_for_label }}">
+              Ομιλητής <span class="text-red-500">*</span>
+              <a href="{% url 'admin:main_person_add' %}" target="_blank"
+                 class="ml-2 text-xs text-python-blue hover:underline font-normal">νέος</a>
+            </label>
+            {% if form.slot1_presenters.errors %}<p class="text-red-600 text-sm mb-1">{{ form.slot1_presenters.errors|join:", " }}</p>{% endif %}
+            {{ form.slot1_presenters }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.slot1_url.id_for_label }}">
+              Σύνδεσμος
+            </label>
+            {% if form.slot1_url.errors %}<p class="text-red-600 text-sm mb-1">{{ form.slot1_url.errors|join:", " }}</p>{% endif %}
+            {{ form.slot1_url }}
+          </div>
+        </div>
+
+        <!-- Slot 2 (optional) -->
+        <div class="mb-6 p-4 border border-gray-200 rounded-lg">
+          <h5 class="font-medium text-gray-800 mb-3">
+            Παρουσίαση 2 <span class="text-gray-400 text-sm font-normal">(προαιρετική)</span>
+          </h5>
+          <div class="mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.slot2_name.id_for_label }}">
+              Τίτλος
+            </label>
+            {% if form.slot2_name.errors %}<p class="text-red-600 text-sm mb-1">{{ form.slot2_name.errors|join:", " }}</p>{% endif %}
+            {{ form.slot2_name }}
+          </div>
+          <div class="mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.slot2_presenters.id_for_label }}">
+              Ομιλητής
+              <a href="{% url 'admin:main_person_add' %}" target="_blank"
+                 class="ml-2 text-xs text-python-blue hover:underline font-normal">νέος</a>
+            </label>
+            {% if form.slot2_presenters.errors %}<p class="text-red-600 text-sm mb-1">{{ form.slot2_presenters.errors|join:", " }}</p>{% endif %}
+            {{ form.slot2_presenters }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.slot2_url.id_for_label }}">
+              Σύνδεσμος
+            </label>
+            {% if form.slot2_url.errors %}<p class="text-red-600 text-sm mb-1">{{ form.slot2_url.errors|join:", " }}</p>{% endif %}
+            {{ form.slot2_url }}
+          </div>
+        </div>
+
+        <!-- Slot 3 (optional) -->
+        <div class="mb-6 p-4 border border-gray-200 rounded-lg">
+          <h5 class="font-medium text-gray-800 mb-3">
+            Παρουσίαση 3 <span class="text-gray-400 text-sm font-normal">(προαιρετική)</span>
+          </h5>
+          <div class="mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.slot3_name.id_for_label }}">
+              Τίτλος
+            </label>
+            {% if form.slot3_name.errors %}<p class="text-red-600 text-sm mb-1">{{ form.slot3_name.errors|join:", " }}</p>{% endif %}
+            {{ form.slot3_name }}
+          </div>
+          <div class="mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.slot3_presenters.id_for_label }}">
+              Ομιλητής
+              <a href="{% url 'admin:main_person_add' %}" target="_blank"
+                 class="ml-2 text-xs text-python-blue hover:underline font-normal">νέος</a>
+            </label>
+            {% if form.slot3_presenters.errors %}<p class="text-red-600 text-sm mb-1">{{ form.slot3_presenters.errors|join:", " }}</p>{% endif %}
+            {{ form.slot3_presenters }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.slot3_url.id_for_label }}">
+              Σύνδεσμος
+            </label>
+            {% if form.slot3_url.errors %}<p class="text-red-600 text-sm mb-1">{{ form.slot3_url.errors|join:", " }}</p>{% endif %}
+            {{ form.slot3_url }}
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <button type="submit"
+            class="bg-python-blue text-white px-6 py-2 rounded hover:bg-blue-800 transition-colors font-medium">
+            Δημιουργία μιτάπ
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
+<script>
+  (function () {
+    const DRAFT_KEY = "createMeetupDraft";
+    const form = document.getElementById("create-meetup-form");
+    const descriptionTextarea = form.querySelector('[name="description"]');
+    const descriptionPreview = document.getElementById("description-preview");
+
+    function updatePreview() {
+      const text = descriptionTextarea.value;
+      if (text.trim() === "") {
+        descriptionPreview.classList.add("hidden");
+        descriptionPreview.innerHTML = "";
+      } else {
+        descriptionPreview.innerHTML = marked.parse(text);
+        descriptionPreview.classList.remove("hidden");
+      }
+    }
+
+    function serializeDraft() {
+      const draft = {};
+      const seen = new Set();
+      const elements = form.elements;
+      for (let i = 0; i < elements.length; i++) {
+        const element = elements[i];
+        if (!element.name || element.name === "csrfmiddlewaretoken") {
+          continue;
+        }
+        if (seen.has(element.name)) {
+          continue;
+        }
+        seen.add(element.name);
+        if (
+          element.tagName === "SELECT" ||
+          element.tagName === "TEXTAREA" ||
+          element.tagName === "INPUT"
+        ) {
+          draft[element.name] = element.value;
+        }
+      }
+      return draft;
+    }
+
+    function restoreDraft(draft) {
+      for (const [name, value] of Object.entries(draft)) {
+        const element = form.querySelector('[name="' + name + '"]');
+        if (element) {
+          element.value = value;
+        }
+      }
+    }
+
+    const savedDraft = localStorage.getItem(DRAFT_KEY);
+    if (savedDraft) {
+      try {
+        restoreDraft(JSON.parse(savedDraft));
+      } catch (e) {
+        // Discard corrupt draft data silently.
+        localStorage.removeItem(DRAFT_KEY);
+      }
+    }
+
+    // Save draft on any input or change event. Both are needed: input fires
+    // for text/textarea/url/date/time as the user types; change fires for
+    // selects when the selection is committed.
+    form.addEventListener("input", function () {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(serializeDraft()));
+    });
+    form.addEventListener("change", function () {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(serializeDraft()));
+    });
+
+    // Clear the draft on successful submit just before navigation. A
+    // validation-error response re-populates the form from POST data, so the
+    // draft is only needed if the user closes the tab mid-session.
+    form.addEventListener("submit", function () {
+      localStorage.removeItem(DRAFT_KEY);
+    });
+
+    descriptionTextarea.addEventListener("input", updatePreview);
+
+    // Initialize preview with whatever is in the textarea now (covers both
+    // server-rendered bound-form values and just-restored localStorage drafts).
+    updatePreview();
+  })();
+</script>
+{% endblock %}
