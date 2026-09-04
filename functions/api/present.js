@@ -6,6 +6,7 @@ export async function onRequestPost(context) {
     const email = formData.get("email");
     const title = formData.get("title");
     const description = formData.get("description");
+    const comments = formData.get("comments");
     const turnstileToken = formData.get("cf-turnstile-response");
 
     // Verify the Turnstile token before doing anything else, so bots can't
@@ -46,6 +47,16 @@ export async function onRequestPost(context) {
         });
     }
 
+    const embedFields = [
+        { name: "Name", value: name.trim(), inline: true },
+        { name: "Email", value: email.trim(), inline: true },
+        { name: "Description", value: description.trim() },
+    ];
+    // Optional; Discord rejects embed fields with an empty value.
+    if (comments && comments.trim()) {
+        embedFields.push({ name: "Comments", value: comments.trim() });
+    }
+
     const discordResponse = await fetch(env.DISCORD_WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -54,11 +65,7 @@ export async function onRequestPost(context) {
                 {
                     title: title.trim(),
                     color: 0x306998,
-                    fields: [
-                        { name: "Name", value: name.trim(), inline: true },
-                        { name: "Email", value: email.trim(), inline: true },
-                        { name: "Description", value: description.trim() },
-                    ],
+                    fields: embedFields,
                     timestamp: new Date().toISOString(),
                 },
             ],
