@@ -1,0 +1,1188 @@
+<style>
+    #contest-overlay[hidden] {
+        display: none;
+    }
+
+    #contest-overlay {
+        --contest-blue: #0047ab;
+        --contest-yellow: #fff200;
+        --contest-pink: #ff1493;
+        --contest-red: #e60000;
+        --contest-ink: #111111;
+        align-items: center;
+        animation: contest-rainbow 7s linear infinite, contest-flash-border 0.8s steps(2, end) infinite;
+        background: linear-gradient(120deg, #ff004c, #ff8a00, #fff200, #20d15a, #00c2ff, #7b2cff, #ff1493);
+        background-size: 500% 500%;
+        box-sizing: border-box;
+        color: var(--contest-ink);
+        display: flex;
+        font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+        inset: 0;
+        isolation: isolate;
+        justify-content: center;
+        outline: 12px solid var(--contest-yellow);
+        overflow: auto;
+        overscroll-behavior: contain;
+        position: fixed;
+        text-align: center;
+        z-index: 10000;
+    }
+
+    html.contest-is-open,
+    body.contest-is-open {
+        overflow: hidden;
+    }
+
+    #contest-overlay *,
+    #contest-overlay *::before,
+    #contest-overlay *::after {
+        box-sizing: border-box;
+    }
+
+    .contest-marquee {
+        background: #000000;
+        border-bottom: 5px solid var(--contest-yellow);
+        border-top: 5px solid var(--contest-pink);
+        color: var(--contest-yellow);
+        font-size: clamp(1rem, 2.8vw, 1.8rem);
+        font-weight: 900;
+        left: 0;
+        line-height: 1.4;
+        overflow: hidden;
+        padding: 0.35rem 0;
+        position: fixed;
+        right: 0;
+        text-shadow: 2px 2px 0 var(--contest-red);
+        white-space: nowrap;
+        z-index: 4;
+    }
+
+    .contest-marquee-top {
+        top: 0;
+    }
+
+    .contest-marquee-bottom {
+        bottom: 0;
+    }
+
+    .contest-marquee-track {
+        animation: contest-marquee 12s linear infinite;
+        display: inline-block;
+        min-width: 220%;
+    }
+
+    .contest-marquee-bottom .contest-marquee-track {
+        animation-direction: reverse;
+    }
+
+    .contest-marquee-track span {
+        display: inline-block;
+        margin-right: 2.5rem;
+    }
+
+    .contest-confetti {
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        position: absolute;
+        z-index: 0;
+    }
+
+    .contest-confetti span {
+        animation: contest-confetti-fall var(--contest-duration, 7s) linear var(--contest-delay, 0s) infinite;
+        font-family: sans-serif;
+        font-size: clamp(1.5rem, 4vw, 3rem);
+        left: var(--contest-left);
+        position: absolute;
+        top: -4rem;
+    }
+
+    .contest-panel {
+        background: repeating-linear-gradient(
+            -45deg,
+            #ffffff,
+            #ffffff 14px,
+            #fff8b5 14px,
+            #fff8b5 28px
+        );
+        border: 8px ridge var(--contest-yellow);
+        box-shadow: 0 0 0 5px var(--contest-red), 0 0 0 10px var(--contest-blue), 0 18px 0 rgba(0, 0, 0, 0.4);
+        margin: 5.75rem auto 5rem;
+        max-height: calc(100vh - 10.75rem);
+        overflow: auto;
+        padding: clamp(1.5rem, 4vw, 3.25rem);
+        position: relative;
+        width: min(56rem, calc(100% - 2.5rem));
+        z-index: 2;
+    }
+
+    .contest-close {
+        background: var(--contest-red);
+        border: 4px outset #ff7777;
+        color: #ffffff;
+        cursor: pointer;
+        font-family: Arial, sans-serif;
+        font-size: 1.8rem;
+        font-weight: 900;
+        height: 2.5rem;
+        line-height: 1;
+        position: fixed;
+        right: 1rem;
+        top: 4.5rem;
+        transition: bottom 0.2s ease, left 0.2s ease, right 0.2s ease, top 0.2s ease, transform 0.1s ease;
+        width: 2.5rem;
+        z-index: 6;
+    }
+
+    .contest-close:hover,
+    .contest-close:focus-visible {
+        transform: scale(1.15) rotate(8deg);
+    }
+
+    .contest-close:active {
+        border-style: inset;
+    }
+
+    .contest-close.contest-close-dodged {
+        bottom: 4.5rem;
+        left: 1rem;
+        right: auto;
+        top: auto;
+    }
+
+    .contest-headline {
+        animation: contest-headline-bounce 1.1s ease-in-out infinite;
+        color: var(--contest-red);
+        font-size: clamp(2.1rem, 7vw, 5.8rem);
+        font-style: italic;
+        letter-spacing: 0.04em;
+        line-height: 0.95;
+        margin: 0;
+        text-shadow: 3px 3px 0 var(--contest-yellow), 6px 6px 0 var(--contest-blue);
+        transform-origin: center;
+    }
+
+    .contest-subhead {
+        color: var(--contest-blue);
+        font-family: "Arial Black", Arial, sans-serif;
+        font-size: clamp(1.05rem, 2.6vw, 1.65rem);
+        font-weight: 900;
+        line-height: 1.2;
+        margin: 1.25rem auto;
+        max-width: 42rem;
+        text-shadow: 1px 1px 0 #ffffff;
+    }
+
+    .contest-copy,
+    .contest-instructions,
+    .contest-fine-print,
+    .contest-status,
+    .contest-success {
+        font-family: Arial, sans-serif;
+    }
+
+    .contest-copy,
+    .contest-instructions {
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: 1.45;
+        margin: 1rem auto;
+        max-width: 44rem;
+    }
+
+    .contest-instructions {
+        background: var(--contest-yellow);
+        border: 3px dashed var(--contest-red);
+        box-shadow: 4px 4px 0 var(--contest-blue);
+        padding: 0.8rem 1rem;
+    }
+
+    .contest-starburst {
+        align-items: center;
+        animation: contest-starburst-spin 7s linear infinite, contest-starburst-pulse 1.25s ease-in-out infinite;
+        background: var(--contest-yellow);
+        clip-path: polygon(50% 0%, 60% 24%, 79% 7%, 76% 31%, 100% 29%, 80% 45%, 98% 59%, 74% 61%, 82% 87%, 59% 73%, 50% 100%, 41% 74%, 18% 92%, 26% 64%, 1% 66%, 21% 49%, 0% 34%, 27% 34%, 20% 8%, 41% 25%);
+        color: var(--contest-red);
+        display: flex;
+        font-family: "Arial Black", Arial, sans-serif;
+        font-size: clamp(0.66rem, 1.7vw, 0.95rem);
+        font-weight: 900;
+        height: clamp(6.75rem, 13vw, 9.5rem);
+        justify-content: center;
+        line-height: 1.05;
+        padding: 1.2rem;
+        position: absolute;
+        text-shadow: 1px 1px 0 #ffffff;
+        width: clamp(6.75rem, 13vw, 9.5rem);
+        z-index: 3;
+    }
+
+    .contest-starburst-one {
+        left: clamp(-2.8rem, -1vw, -1rem);
+        top: 3.8rem;
+    }
+
+    .contest-starburst-two {
+        right: clamp(-3rem, -1vw, -1rem);
+        top: 18rem;
+    }
+
+    .contest-starburst-three {
+        bottom: 3.5rem;
+        left: clamp(-2.8rem, -1vw, -1rem);
+    }
+
+    .contest-form {
+        background: rgba(255, 255, 255, 0.9);
+        border: 5px double var(--contest-blue);
+        box-shadow: 6px 6px 0 var(--contest-pink);
+        margin: 1.75rem auto 1rem;
+        max-width: 42rem;
+        padding: clamp(1rem, 3vw, 1.5rem);
+        position: relative;
+        z-index: 1;
+    }
+
+    .contest-canvas-wrap {
+        background: #f4f4f4;
+        border: 4px inset #d0d0d0;
+        margin-bottom: 1rem;
+        position: relative;
+    }
+
+    #contest-canvas {
+        background-color: #ffffff;
+        background-image: radial-gradient(#d5d5d5 0.8px, transparent 0.8px);
+        background-size: 11px 11px;
+        cursor: crosshair;
+        display: block;
+        height: clamp(11rem, 28vw, 16rem);
+        touch-action: none;
+        width: 100%;
+    }
+
+    .contest-clear {
+        background: var(--contest-red);
+        border: 3px outset #ff7070;
+        bottom: 0.55rem;
+        color: #ffffff;
+        cursor: pointer;
+        font-family: "Arial Black", Arial, sans-serif;
+        font-size: 0.85rem;
+        padding: 0.45rem 0.75rem;
+        position: absolute;
+        right: 0.55rem;
+        text-shadow: 1px 1px 0 #000000;
+    }
+
+    .contest-clear:active,
+    .contest-submit:active {
+        border-style: inset;
+        transform: translate(2px, 2px);
+    }
+
+    .contest-fields {
+        display: grid;
+        gap: 0.85rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin: 1rem 0;
+        text-align: left;
+    }
+
+    .contest-field label {
+        color: var(--contest-blue);
+        display: block;
+        font-family: "Arial Black", Arial, sans-serif;
+        font-size: 0.9rem;
+        font-weight: 900;
+        margin-bottom: 0.3rem;
+    }
+
+    .contest-field input {
+        border: 3px solid var(--contest-blue);
+        border-radius: 0;
+        font-family: Arial, sans-serif;
+        font-size: 1rem;
+        padding: 0.65rem;
+        width: 100%;
+    }
+
+    .contest-field input:focus {
+        outline: 4px solid var(--contest-yellow);
+        outline-offset: 1px;
+    }
+
+    .contest-turnstile {
+        display: flex;
+        justify-content: center;
+        margin: 1rem 0;
+        min-height: 65px;
+    }
+
+    .contest-submit {
+        animation: contest-submit-wiggle 1.8s ease-in-out infinite;
+        background: var(--contest-pink);
+        border: 5px outset #ff7dba;
+        box-shadow: 5px 5px 0 var(--contest-blue);
+        color: #ffffff;
+        cursor: pointer;
+        font-family: "Arial Black", Arial, sans-serif;
+        font-size: clamp(1.1rem, 3vw, 1.5rem);
+        font-weight: 900;
+        padding: 0.75rem 1rem;
+        text-shadow: 2px 2px 0 var(--contest-red);
+        width: 100%;
+    }
+
+    .contest-submit:disabled,
+    .contest-clear:disabled {
+        cursor: wait;
+        opacity: 0.65;
+    }
+
+    .contest-status {
+        color: var(--contest-red);
+        font-size: 0.95rem;
+        font-weight: 700;
+        line-height: 1.35;
+        margin: 1rem 0 0;
+        min-height: 1.35em;
+    }
+
+    .contest-success {
+        background: #d9ffd9;
+        border: 5px double #148014;
+        box-shadow: 6px 6px 0 var(--contest-yellow);
+        font-size: 1.05rem;
+        font-weight: 700;
+        line-height: 1.45;
+        margin: 1.75rem auto 1rem;
+        max-width: 42rem;
+        padding: 1.25rem;
+    }
+
+    .contest-fine-print {
+        font-size: 0.74rem;
+        font-style: italic;
+        line-height: 1.35;
+        margin: 1.25rem auto 0;
+        max-width: 44rem;
+    }
+
+    @keyframes contest-rainbow {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    @keyframes contest-flash-border {
+        0%,
+        100% {
+            outline-color: var(--contest-yellow);
+        }
+        50% {
+            outline-color: #ffffff;
+        }
+    }
+
+    @keyframes contest-marquee {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(-50%);
+        }
+    }
+
+    @keyframes contest-confetti-fall {
+        from {
+            transform: translate3d(0, -10vh, 0) rotate(0deg);
+        }
+        to {
+            transform: translate3d(4vw, 115vh, 0) rotate(720deg);
+        }
+    }
+
+    @keyframes contest-headline-bounce {
+        0%,
+        100% {
+            transform: translateY(0) rotate(-1deg) scale(1);
+        }
+        50% {
+            transform: translateY(-0.28rem) rotate(1deg) scale(1.04);
+        }
+    }
+
+    @keyframes contest-starburst-spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes contest-starburst-pulse {
+        0%,
+        100% {
+            filter: brightness(1);
+        }
+        50% {
+            filter: brightness(1.35);
+        }
+    }
+
+    @keyframes contest-submit-wiggle {
+        0%,
+        78%,
+        100% {
+            transform: rotate(0deg);
+        }
+        82% {
+            transform: rotate(-2deg);
+        }
+        86% {
+            transform: rotate(2deg);
+        }
+        90% {
+            transform: rotate(-1deg);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .contest-panel {
+            margin-bottom: 4.1rem;
+            margin-top: 4.65rem;
+            width: min(100% - 1.25rem, 42rem);
+            overflow-x: hidden;
+        }
+
+        .contest-starburst-two {
+            right: -2rem;
+            top: 22rem;
+        }
+
+        .contest-starburst-three {
+            bottom: 1rem;
+        }
+
+        .contest-fields {
+            grid-template-columns: 1fr;
+        }
+
+        .contest-close {
+            right: 0.5rem;
+            top: 3.8rem;
+        }
+
+        .contest-close.contest-close-dodged {
+            bottom: 3.8rem;
+            left: 0.5rem;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        #contest-overlay,
+        .contest-marquee-track,
+        .contest-confetti span,
+        .contest-headline,
+        .contest-starburst,
+        .contest-submit {
+            animation-duration: 0.01ms;
+            animation-iteration-count: 1;
+        }
+
+        .contest-close {
+            transition-duration: 0.01ms;
+        }
+    }
+</style>
+
+<div id="contest-overlay" hidden aria-hidden="true" aria-label="ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ" lang="el" role="dialog" aria-modal="true">
+    <div class="contest-confetti" aria-hidden="true">
+        <span style="--contest-left: 3%; --contest-delay: -1s; --contest-duration: 8s;">🐍</span>
+        <span style="--contest-left: 12%; --contest-delay: -4s; --contest-duration: 7s;">🎉</span>
+        <span style="--contest-left: 21%; --contest-delay: -2s; --contest-duration: 9s;">🏆</span>
+        <span style="--contest-left: 31%; --contest-delay: -5s; --contest-duration: 8.5s;">🐍</span>
+        <span style="--contest-left: 42%; --contest-delay: -3s; --contest-duration: 6.5s;">🎉</span>
+        <span style="--contest-left: 52%; --contest-delay: -6s; --contest-duration: 10s;">🏆</span>
+        <span style="--contest-left: 63%; --contest-delay: -2.5s; --contest-duration: 7.5s;">🐍</span>
+        <span style="--contest-left: 72%; --contest-delay: -4.5s; --contest-duration: 8.2s;">🎉</span>
+        <span style="--contest-left: 82%; --contest-delay: -1.5s; --contest-duration: 9.3s;">🏆</span>
+        <span style="--contest-left: 92%; --contest-delay: -5.5s; --contest-duration: 7.2s;">🐍</span>
+    </div>
+
+    <div class="contest-marquee contest-marquee-top" aria-hidden="true">
+        <div class="contest-marquee-track">
+            <span>🎉 ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ 🎉</span><span>🎉 ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ 🎉</span><span>🎉 ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ 🎉</span><span>🎉 ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ 🎉</span><span>🎉 ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ 🎉</span><span>🎉 ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ 🎉</span><span>🎉 ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ 🎉</span><span>🎉 ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ 🎉</span>
+        </div>
+    </div>
+
+    <div class="contest-marquee contest-marquee-bottom" aria-hidden="true">
+        <div class="contest-marquee-track">
+            <span>🎉 ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ 🎉</span><span>🎉 ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ 🎉</span><span>🎉 ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ 🎉</span><span>🎉 ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ 🎉</span><span>🎉 ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ 🎉</span><span>🎉 ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ 🎉</span><span>🎉 ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ 🎉</span><span>🎉 ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ 🎉</span>
+        </div>
+    </div>
+
+    <button id="contest-close" class="contest-close" type="button" aria-label="Κλείσιμο">×</button>
+
+    <section class="contest-panel" aria-labelledby="contest-headline">
+        <div class="contest-starburst contest-starburst-one">ΑΛΗΘΙΝΟ!</div>
+        <div class="contest-starburst contest-starburst-two">100% ΔΩΡΕΑΝ ΣΥΜΜΕΤΟΧΗ</div>
+        <div class="contest-starburst contest-starburst-three">ΚΕΡΔΙΣΤΕ ΤΩΡΑ!</div>
+
+        <h2 id="contest-headline" class="contest-headline">ΜΕΓΑΛΟΣ ΔΙΑΓΩΝΙΣΜΟΣ!!!</h2>
+        <p class="contest-subhead">Κερδίστε ΔΥΟ (2) εισιτήρια για το PyCon 2026!!!</p>
+        <p class="contest-copy">Ναι, καλά διαβάσατε, δύο δωρεάν εισιτήρια για το εντελώς πραγματικό συνέδριο PyCon 2026, που σίγουρα θα γίνει.</p>
+        <p class="contest-instructions">Για να λάβετε μέρος, ζωγραφίστε έναν πύθωνα. Ναι, τώρα. Ναι, εδώ. Με το ποντίκι. Η καλλιτεχνική επιτροπή περιμένει.</p>
+
+        <form id="contest-form" class="contest-form" novalidate>
+            <div class="contest-canvas-wrap">
+                <canvas id="contest-canvas" aria-label="Ζωγραφίστε έναν πύθωνα"></canvas>
+                <button id="contest-clear" class="contest-clear" type="button">Μαλακία</button>
+            </div>
+
+            <div class="contest-fields">
+                <div class="contest-field">
+                    <label for="contest-name">Όνομα</label>
+                    <input id="contest-name" name="name" type="text" autocomplete="name" />
+                </div>
+                <div class="contest-field">
+                    <label for="contest-email">Email</label>
+                    <input id="contest-email" name="email" type="email" autocomplete="email" />
+                </div>
+            </div>
+
+            <div id="contest-turnstile" class="contest-turnstile"></div>
+            <button id="contest-submit" class="contest-submit" type="submit">ΣΥΜΜΕΤΟΧΗ!!!</button>
+            <p id="contest-status" class="contest-status" aria-live="polite" role="status"></p>
+        </form>
+
+        <div id="contest-success" class="contest-success" hidden aria-live="polite" role="status">
+            Η συμμετοχή σας καταχωρήθηκε! Ο πύθωνάς σας είναι υπέροχος.** Ο νικητής θα ανακοινωθεί στο Discord. Καλή επιτυχία!
+        </div>
+
+        <p class="contest-fine-print">* Θέλουμε φωτογραφίες και παρουσίαση μετά για αντάλλαγμα ** Πιθανότατα δεν είναι</p>
+    </section>
+</div>
+
+<script>
+    (function () {
+        "use strict";
+
+        var storageKey = "contest-seen";
+        var overlay = document.getElementById("contest-overlay");
+        var closeButton = document.getElementById("contest-close");
+        var form = document.getElementById("contest-form");
+        var canvas = document.getElementById("contest-canvas");
+        var clearButton = document.getElementById("contest-clear");
+        var submitButton = document.getElementById("contest-submit");
+        var submitLabel = submitButton.textContent;
+        var nameInput = document.getElementById("contest-name");
+        var emailInput = document.getElementById("contest-email");
+        var status = document.getElementById("contest-status");
+        var success = document.getElementById("contest-success");
+        var turnstileElement = document.getElementById("contest-turnstile");
+        var canvasContext = null;
+        var drawing = false;
+        var drawingPointerId = null;
+        var hasDrawing = false;
+        var closeDodged = false;
+        var turnstileWidgetId = null;
+        var openingFanfarePlayed = false;
+        var audioContext = null;
+        var previouslyFocusedElement = null;
+
+        function hasSeenContest() {
+            try {
+                return window.sessionStorage.getItem(storageKey) !== null;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        function markContestSeen() {
+            try {
+                window.sessionStorage.setItem(storageKey, "true");
+            } catch (error) {
+                return;
+            }
+        }
+
+        function setDrawingStyle() {
+            canvasContext.lineCap = "round";
+            canvasContext.lineJoin = "round";
+            canvasContext.lineWidth = 7;
+            canvasContext.strokeStyle = "#0047ab";
+        }
+
+        function resizeCanvas() {
+            var rect = canvas.getBoundingClientRect();
+            var savedCanvas;
+            var pixelRatio;
+
+            if (!rect.width || !rect.height) {
+                return;
+            }
+
+            if (canvas.width && canvas.height && hasDrawing) {
+                savedCanvas = document.createElement("canvas");
+                savedCanvas.width = canvas.width;
+                savedCanvas.height = canvas.height;
+                savedCanvas.getContext("2d").drawImage(canvas, 0, 0);
+            }
+
+            pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+            canvas.width = Math.max(1, Math.round(rect.width * pixelRatio));
+            canvas.height = Math.max(1, Math.round(rect.height * pixelRatio));
+            canvasContext = canvas.getContext("2d");
+            canvasContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+            setDrawingStyle();
+
+            if (savedCanvas) {
+                canvasContext.drawImage(
+                    savedCanvas,
+                    0,
+                    0,
+                    savedCanvas.width,
+                    savedCanvas.height,
+                    0,
+                    0,
+                    rect.width,
+                    rect.height
+                );
+            }
+        }
+
+        function pointForEvent(event) {
+            var rect = canvas.getBoundingClientRect();
+
+            return {
+                x: event.clientX - rect.left,
+                y: event.clientY - rect.top,
+            };
+        }
+
+        function clearCanvas() {
+            canvasContext.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+            hasDrawing = false;
+        }
+
+        function beginDrawing(event) {
+            var point;
+
+            if (event.pointerType === "mouse" && event.button !== 0) {
+                return;
+            }
+
+            event.preventDefault();
+            point = pointForEvent(event);
+            drawing = true;
+            drawingPointerId = event.pointerId;
+            hasDrawing = true;
+            canvas.setPointerCapture(event.pointerId);
+            canvasContext.beginPath();
+            canvasContext.moveTo(point.x, point.y);
+            canvasContext.lineTo(point.x + 0.01, point.y + 0.01);
+            canvasContext.stroke();
+        }
+
+        function continueDrawing(event) {
+            var point;
+
+            if (!drawing || event.pointerId !== drawingPointerId) {
+                return;
+            }
+
+            event.preventDefault();
+            point = pointForEvent(event);
+            canvasContext.lineTo(point.x, point.y);
+            canvasContext.stroke();
+        }
+
+        function finishDrawing(event) {
+            if (!drawing || event.pointerId !== drawingPointerId) {
+                return;
+            }
+
+            drawing = false;
+            drawingPointerId = null;
+            if (canvas.hasPointerCapture(event.pointerId)) {
+                canvas.releasePointerCapture(event.pointerId);
+            }
+        }
+
+        function getAudioContext() {
+            var AudioContext = window.AudioContext || window.webkitAudioContext;
+
+            if (!AudioContext) {
+                return null;
+            }
+
+            if (!audioContext) {
+                audioContext = new AudioContext();
+            }
+
+            return audioContext;
+        }
+
+        function whenAudioIsRunning(context, callback) {
+            var resumePromise;
+
+            if (context.state === "running") {
+                callback();
+                return;
+            }
+
+            try {
+                resumePromise = context.resume();
+            } catch (error) {
+                return;
+            }
+
+            if (resumePromise && typeof resumePromise.then === "function") {
+                resumePromise
+                    .then(function () {
+                        if (context.state === "running") {
+                            callback();
+                        }
+                    })
+                    .catch(function () {});
+            } else if (context.state === "running") {
+                callback();
+            }
+        }
+
+        function playTone(context, frequency, start, duration, type, volume) {
+            var oscillator = context.createOscillator();
+            var gain = context.createGain();
+
+            oscillator.type = type;
+            oscillator.frequency.setValueAtTime(frequency, start);
+            gain.gain.setValueAtTime(volume, start);
+            gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
+            oscillator.connect(gain);
+            gain.connect(context.destination);
+            oscillator.start(start);
+            oscillator.stop(start + duration);
+        }
+
+        function playHonk(event) {
+            var context;
+
+            if (!event.isTrusted) {
+                return;
+            }
+
+            context = getAudioContext();
+            if (!context) {
+                return;
+            }
+
+            whenAudioIsRunning(context, function () {
+                var now = context.currentTime;
+
+                playTone(context, 196, now, 0.28, "sawtooth", 0.09);
+                playTone(context, 146, now + 0.12, 0.38, "square", 0.06);
+            });
+        }
+
+        function playBrassNote(context, frequency, start, duration, peakGain, useVibrato) {
+            var voices = [
+                { detune: -4, mix: 0.48, multiplier: 1, type: "sawtooth" },
+                { detune: 4, mix: 0.38, multiplier: 1, type: "square" },
+                { detune: 0, mix: 0.14, multiplier: 2, type: "sine" },
+            ];
+            var oscillators = [];
+            var releaseStart = start + Math.max(0.06, duration - 0.12);
+            var index;
+            var oscillator;
+            var gain;
+            var voice;
+            var vibrato;
+            var vibratoGain;
+
+            for (index = 0; index < voices.length; index += 1) {
+                voice = voices[index];
+                oscillator = context.createOscillator();
+                gain = context.createGain();
+                oscillator.type = voice.type;
+                oscillator.frequency.setValueAtTime(frequency * voice.multiplier, start);
+                oscillator.detune.setValueAtTime(voice.detune, start);
+                gain.gain.setValueAtTime(0.001, start);
+                gain.gain.linearRampToValueAtTime(peakGain * voice.mix, start + 0.025);
+                gain.gain.setValueAtTime(peakGain * voice.mix * 0.85, releaseStart);
+                gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
+                oscillator.connect(gain);
+                gain.connect(context.destination);
+                oscillator.start(start);
+                oscillator.stop(start + duration);
+                oscillators.push(oscillator);
+            }
+
+            if (!useVibrato) {
+                return;
+            }
+
+            vibrato = context.createOscillator();
+            vibratoGain = context.createGain();
+            vibrato.type = "sine";
+            vibrato.frequency.setValueAtTime(5.25, start);
+            vibratoGain.gain.setValueAtTime(0.001, start);
+            vibratoGain.gain.linearRampToValueAtTime(5, start + 0.14);
+            vibratoGain.gain.exponentialRampToValueAtTime(0.001, start + duration);
+            vibrato.connect(vibratoGain);
+            for (index = 0; index < oscillators.length; index += 1) {
+                vibratoGain.connect(oscillators[index].frequency);
+            }
+            vibrato.start(start);
+            vibrato.stop(start + duration);
+        }
+
+        function scheduleFanfare(context) {
+            var now = context.currentTime + 0.02;
+
+            playBrassNote(context, 392, now, 0.18, 0.22, false);
+            playBrassNote(context, 392, now + 0.25, 0.18, 0.22, false);
+            playBrassNote(context, 392, now + 0.5, 0.18, 0.22, false);
+            playBrassNote(context, 523.25, now + 0.75, 0.32, 0.22, false);
+            playBrassNote(context, 659.25, now + 1.1, 0.88, 0.12, true);
+            playBrassNote(context, 783.99, now + 1.1, 0.88, 0.12, true);
+        }
+
+        function playFanfare() {
+            if (!audioContext) {
+                return;
+            }
+
+            whenAudioIsRunning(audioContext, function () {
+                scheduleFanfare(audioContext);
+            });
+        }
+
+        function playOpeningFanfare(event) {
+            var context;
+
+            if (openingFanfarePlayed || (event && !event.isTrusted)) {
+                return;
+            }
+
+            context = getAudioContext();
+            if (!context) {
+                return;
+            }
+
+            whenAudioIsRunning(context, function () {
+                if (openingFanfarePlayed || overlay.hidden) {
+                    return;
+                }
+
+                openingFanfarePlayed = true;
+                playFanfare();
+            });
+        }
+
+        function createNoiseBuffer(context, duration) {
+            var buffer = context.createBuffer(1, Math.ceil(context.sampleRate * duration), context.sampleRate);
+            var data = buffer.getChannelData(0);
+            var index;
+
+            for (index = 0; index < data.length; index += 1) {
+                data[index] = Math.random() * 2 - 1;
+            }
+
+            return buffer;
+        }
+
+        function playDrumBurst(context, noiseBuffer, start, duration) {
+            var noise = context.createBufferSource();
+            var noiseGain = context.createGain();
+            var square = context.createOscillator();
+            var squareGain = context.createGain();
+
+            noise.buffer = noiseBuffer;
+            noiseGain.gain.setValueAtTime(0.001, start);
+            noiseGain.gain.linearRampToValueAtTime(0.055, start + 0.005);
+            noiseGain.gain.exponentialRampToValueAtTime(0.001, start + duration);
+            square.type = "square";
+            square.frequency.setValueAtTime(95, start);
+            squareGain.gain.setValueAtTime(0.001, start);
+            squareGain.gain.linearRampToValueAtTime(0.03, start + 0.005);
+            squareGain.gain.exponentialRampToValueAtTime(0.001, start + duration);
+            noise.connect(noiseGain);
+            noiseGain.connect(context.destination);
+            square.connect(squareGain);
+            squareGain.connect(context.destination);
+            noise.start(start);
+            noise.stop(start + duration);
+            square.start(start);
+            square.stop(start + duration);
+        }
+
+        function playDrumroll(event) {
+            var context;
+
+            if (!event.isTrusted) {
+                return;
+            }
+
+            context = getAudioContext();
+            if (!context) {
+                return;
+            }
+
+            whenAudioIsRunning(context, function () {
+                var noiseBuffer = createNoiseBuffer(context, 0.06);
+                var now = context.currentTime + 0.01;
+                var index;
+
+                for (index = 0; index < 11; index += 1) {
+                    playDrumBurst(context, noiseBuffer, now + index * 0.072, 0.06);
+                }
+            });
+        }
+
+        function renderTurnstile() {
+            if (!window.turnstile || turnstileWidgetId !== null) {
+                return;
+            }
+
+            turnstileWidgetId = window.turnstile.render(turnstileElement, {
+                sitekey: "0x4AAAAAACjhhMHzs4kxktwU",
+                size: window.matchMedia("(max-width: 480px)").matches ? "compact" : "normal",
+            });
+        }
+
+        function loadTurnstile() {
+            var script = document.getElementById("contest-turnstile-script");
+            var existingScript;
+            var scripts;
+            var index;
+
+            if (window.turnstile) {
+                renderTurnstile();
+                return;
+            }
+
+            if (script) {
+                return;
+            }
+
+            scripts = document.querySelectorAll("script[src]");
+            for (index = 0; index < scripts.length; index += 1) {
+                existingScript = scripts[index];
+                if (existingScript.src.indexOf("https://challenges.cloudflare.com/turnstile/v0/api.js") === 0) {
+                    existingScript.addEventListener("load", renderTurnstile, { once: true });
+                    return;
+                }
+            }
+
+            script = document.createElement("script");
+            script.id = "contest-turnstile-script";
+            script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+            script.async = true;
+            script.defer = true;
+            script.addEventListener("load", renderTurnstile, { once: true });
+            document.head.appendChild(script);
+        }
+
+        function setStatus(message) {
+            status.textContent = message;
+        }
+
+        function setSubmitting(isSubmitting) {
+            submitButton.disabled = isSubmitting;
+            clearButton.disabled = isSubmitting;
+            submitButton.textContent = isSubmitting
+                ? "Η επιτροπή κοιτάει το φίδι σας…"
+                : submitLabel;
+        }
+
+        function resetTurnstile() {
+            if (!window.turnstile || turnstileWidgetId === null) {
+                return;
+            }
+
+            try {
+                window.turnstile.reset(turnstileWidgetId);
+            } catch (error) {}
+        }
+
+        function showNetworkError() {
+            resetTurnstile();
+            setSubmitting(false);
+            setStatus("Άμα δε μπορείτε να έχετε ίντερνετ για μισό λεπτό, δε σας αξίζει να πάτε πουθενά.");
+        }
+
+        function trapFocus(event) {
+            var focusableElements = overlay.querySelectorAll(
+                "a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])"
+            );
+            var firstFocusable = null;
+            var lastFocusable = null;
+            var index;
+
+            for (index = 0; index < focusableElements.length; index += 1) {
+                if (focusableElements[index].getClientRects().length) {
+                    if (!firstFocusable) {
+                        firstFocusable = focusableElements[index];
+                    }
+                    lastFocusable = focusableElements[index];
+                }
+            }
+
+            if (!firstFocusable) {
+                return;
+            }
+
+            if (event.shiftKey && document.activeElement === firstFocusable) {
+                event.preventDefault();
+                lastFocusable.focus();
+            } else if (!event.shiftKey && document.activeElement === lastFocusable) {
+                event.preventDefault();
+                firstFocusable.focus();
+            }
+        }
+
+        function openContest() {
+            if (hasSeenContest()) {
+                return;
+            }
+
+            previouslyFocusedElement = document.activeElement;
+            overlay.hidden = false;
+            overlay.setAttribute("aria-hidden", "false");
+            document.documentElement.classList.add("contest-is-open");
+            document.body.classList.add("contest-is-open");
+            window.requestAnimationFrame(function () {
+                resizeCanvas();
+                closeButton.focus();
+            });
+            loadTurnstile();
+            openingFanfarePlayed = false;
+            playOpeningFanfare();
+        }
+
+        function closeContest(event) {
+            playHonk(event);
+            markContestSeen();
+            overlay.hidden = true;
+            overlay.setAttribute("aria-hidden", "true");
+            document.documentElement.classList.remove("contest-is-open");
+            document.body.classList.remove("contest-is-open");
+
+            if (previouslyFocusedElement && document.contains(previouslyFocusedElement)) {
+                previouslyFocusedElement.focus();
+            }
+            previouslyFocusedElement = null;
+        }
+
+        canvas.addEventListener("pointerdown", beginDrawing);
+        canvas.addEventListener("pointermove", continueDrawing);
+        canvas.addEventListener("pointerup", finishDrawing);
+        canvas.addEventListener("pointercancel", finishDrawing);
+
+        overlay.addEventListener("pointerdown", playOpeningFanfare);
+        overlay.addEventListener("keydown", playOpeningFanfare);
+        window.addEventListener("resize", function () {
+            if (!overlay.hidden) {
+                resizeCanvas();
+            }
+        });
+
+        clearButton.addEventListener("click", function (event) {
+            playHonk(event);
+            clearCanvas();
+            setStatus("");
+        });
+
+        closeButton.addEventListener("pointerenter", function () {
+            if (!closeDodged) {
+                closeDodged = true;
+                closeButton.classList.add("contest-close-dodged");
+            }
+        });
+        closeButton.addEventListener("click", closeContest);
+
+        document.addEventListener("keydown", function (event) {
+            if (overlay.hidden) {
+                return;
+            }
+
+            if (event.key === "Escape") {
+                event.preventDefault();
+                closeContest(event);
+            } else if (event.key === "Tab") {
+                trapFocus(event);
+            }
+        });
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            playDrumroll(event);
+            setStatus("");
+
+            if (!hasDrawing) {
+                setStatus("Ο καμβάς είναι άδειος. Η επιτροπή δεν δέχεται αόρατους πύθωνες.");
+                return;
+            }
+
+            if (!nameInput.value.trim() || !emailInput.value.trim()) {
+                setStatus("Άμα δεν ξέρουμε πού να σας βρούμε θα πάμε εμείς.");
+                return;
+            }
+
+            setSubmitting(true);
+            canvas.toBlob(function (drawingBlob) {
+                var formData;
+                var turnstileResponse;
+
+                if (!drawingBlob) {
+                    showNetworkError();
+                    return;
+                }
+
+                formData = new FormData(form);
+                turnstileResponse = turnstileElement.querySelector("input[name='cf-turnstile-response']");
+                formData.set(
+                    "cf-turnstile-response",
+                    turnstileResponse ? turnstileResponse.value : ""
+                );
+                formData.set("drawing", drawingBlob, "python.png");
+
+                fetch("/api/contest", {
+                    method: "POST",
+                    body: formData,
+                })
+                    .then(function (response) {
+                        if (!response.ok) {
+                            throw new Error("Contest submission failed");
+                        }
+
+                        return response.json();
+                    })
+                    .then(function (response) {
+                        if (!response || response.ok !== true) {
+                            throw new Error("Contest submission failed");
+                        }
+
+                        markContestSeen();
+                        form.hidden = true;
+                        success.hidden = false;
+                        playFanfare();
+                    })
+                    .catch(showNetworkError);
+            }, "image/png");
+        });
+
+        if (!hasSeenContest()) {
+            window.setTimeout(openContest, 2000);
+        }
+    }());
+</script>
