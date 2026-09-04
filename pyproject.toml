@@ -6,7 +6,10 @@ authors = [
     { name = "Stavros Korokithakis", email = "hi@stavros.io" },
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+# No .python-version on purpose: Cloudflare Pages would compile that exact
+# version from source (~3.5 min). With no pin it uses its preinstalled 3.13.x.
+# The <3.14 cap keeps local uv on 3.13 too; the locked deps have no 3.14 wheels.
+requires-python = ">=3.13,<3.14"
 dependencies = [
     "django-distill>=3.2.7",
     "django-extensions>=3.2.3",
