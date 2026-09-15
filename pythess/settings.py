@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
@@ -53,6 +52,21 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+# Sessions live in local memory, so they die when the server stops and never touch
+# db.sqlite3. That file is committed to a public repo, and database-backed sessions kept
+# leaking staff session keys into it. Memory is safe here because the public site is
+# static (django-distill) and Django only ever runs locally, single-process, for one
+# admin. Signed cookies were the other candidate, but SECRET_KEY is committed in the
+# clear, so anyone could forge a session cookie with it. The sessions app is deliberately
+# absent from INSTALLED_APPS, since it only provides the database-backed Session model
+# that nothing uses now. Re-add it if you ever go back to database sessions.
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
+# Expires a session a day after it was last written, which here means a day after login,
+# because nothing else writes to the session except the odd oversized message. This only
+# has any effect if the server stays up for days, since a restart clears them regardless.
+SESSION_COOKIE_AGE = 60 * 60 * 24
 
 ROOT_URLCONF = "pythess.urls"
 
