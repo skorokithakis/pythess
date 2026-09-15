@@ -37,6 +37,13 @@
               class="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 border border-transparent text-sm sm:text-base font-medium rounded-md text-white bg-py-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors shadow-md hover:shadow-lg"
               ><i class="fa-solid fa-chalkboard-user mr-2"></i>Παρουσιάστε κάτι</a
             >
+            {% if request.user.is_staff %}
+            <a
+              href="{% url "create-meetup" %}"
+              class="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 border border-transparent text-sm sm:text-base font-medium rounded-md text-white bg-py-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors shadow-md hover:shadow-lg"
+              ><i class="fa-solid fa-calendar-plus mr-2"></i>Βάλε νέο μιτάπ</a
+            >
+            {% endif %}
           </div>
         </div>
       </section>

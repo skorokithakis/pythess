@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Νέο μιτάπ{% endblock title %}
 
@@ -29,6 +30,15 @@
           </label>
           {% if form.title.errors %}<p class="text-red-600 text-sm mb-1">{{ form.title.errors|join:", " }}</p>{% endif %}
           {{ form.title }}
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.slug.id_for_label }}">
+            Slug <span class="text-red-500">*</span>
+          </label>
+          <p class="text-xs text-gray-500 mb-1">Συμπληρώνεται αυτόματα από τον τίτλο.</p>
+          {% if form.slug.errors %}<p class="text-red-600 text-sm mb-1">{{ form.slug.errors|join:", " }}</p>{% endif %}
+          {{ form.slug }}
         </div>
 
         <div class="mb-4">
@@ -172,12 +182,34 @@
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
+<script src="{% static 'admin/js/urlify.js' %}"></script>
 <script>
   (function () {
     const DRAFT_KEY = "createMeetupDraft";
     const form = document.getElementById("create-meetup-form");
     const descriptionTextarea = form.querySelector('[name="description"]');
     const descriptionPreview = document.getElementById("description-preview");
+    const titleInput = form.querySelector('[name="title"]');
+    const slugInput = form.querySelector('[name="slug"]');
+
+    // URLify maps several Greek letters to digits or "y" (θ->8, ξ->3, η->h,
+    // υ->y) and knows nothing about Greek digraphs, so those cases cannot come
+    // from Django's table. Pre-substituting just those letters lets the accent
+    // and Latin maps stay in sync with the installed Django.
+    // The digraph patterns deliberately require an unaccented first vowel, so
+    // an accent on it (άυλος) keeps the two vowels separate as it should.
+    // A diaeresis on the second vowel (ϋ) also fails these patterns and falls
+    // through to the i rule below.
+    function slugFromTitle(text) {
+      const prepared = text
+        .replace(/ου|ού/gi, "ou")
+        .replace(/αυ|αύ/gi, "av")
+        .replace(/ευ|εύ/gi, "ev")
+        .replace(/θ/gi, "th")
+        .replace(/ξ/gi, "ks")
+        .replace(/[ηήυύϋΰ]/gi, "i");
+      return URLify(prepared, 255);
+    }
 
     function updatePreview() {
       const text = descriptionTextarea.value;
@@ -231,6 +263,23 @@
         // Discard corrupt draft data silently.
         localStorage.removeItem(DRAFT_KEY);
       }
+    }
+
+    // Mirror the admin's prepopulated fields: drive the slug from the title only
+    // while the slug is still empty, and stop for good once the user types into
+    // it. This keeps a slug that the server re-rendered after a validation error
+    // or that the draft restored.
+    if (slugInput.value === "") {
+      let slugEditedByHand = false;
+      titleInput.addEventListener("input", function () {
+        if (slugEditedByHand) {
+          return;
+        }
+        slugInput.value = slugFromTitle(titleInput.value);
+      });
+      slugInput.addEventListener("input", function () {
+        slugEditedByHand = true;
+      });
     }
 
     // Save draft on any input or change event. Both are needed: input fires

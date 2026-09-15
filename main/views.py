@@ -12,7 +12,6 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.text import slugify
 from ics import Calendar
 from ics import Event as IcsEvent
 
@@ -135,7 +134,6 @@ def create_meetup(request: HttpRequest) -> HttpResponse:
         form = CreateMeetupForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            slug = slugify(data["title"])
             date_time = timezone.make_aware(
                 datetime.datetime.combine(data["date"], data["time"])
             )
@@ -143,7 +141,7 @@ def create_meetup(request: HttpRequest) -> HttpResponse:
                 with transaction.atomic():
                     event = Event.objects.create(
                         title=data["title"],
-                        slug=slug,
+                        slug=data["slug"],
                         description=data["description"],
                         date_time=date_time,
                         venue=data["venue"],
@@ -181,7 +179,7 @@ def create_meetup(request: HttpRequest) -> HttpResponse:
 
                 return redirect(reverse("admin:main_event_change", args=[event.pk]))
             except IntegrityError:
-                form.add_error(None, "Υπάρχει ήδη μιτάπ με αυτό το slug.")
+                form.add_error("slug", "Υπάρχει ήδη μιτάπ με αυτό το slug.")
     else:
         form = CreateMeetupForm()
 
