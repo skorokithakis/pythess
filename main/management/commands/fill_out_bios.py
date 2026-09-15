@@ -1,10 +1,35 @@
+import random
+
 import anthropic
 from django.core.management.base import BaseCommand
 
 from main.models import Person
 
+# Deliberately mundane themes. The three fixed examples in the prompt pull every bio
+# towards the same handful of gags, and temperature is already at its maximum, so a
+# random theme per call is the remaining lever for variety. Mundane themes clash with
+# the tech content, which is where the humour comes from.
+THEMES = [
+    "γραφειοκρατία",
+    "φαγητό",
+    "ποδόσφαιρο",
+    "στρατός",
+    "ζωή στο χωριό",
+    "πλοία της γραμμής",
+    "φόροι",
+    "καιρός",
+    "γάτες",
+    "καραόκε",
+    "οδοντίατροι",
+    "οδηγοί λεωφορείων",
+    "γάμοι",
+    "λαχεία",
+    "σούπερ μάρκετ",
+    "υδραυλικά",
+]
 
-def get_bio(name: str) -> str:
+
+def get_bio(name: str, theme: str) -> str:
     client = anthropic.Anthropic()
     prompt = f"""
 I run the Thessaloniki Python meetup (called PyThess). I run it in a tongue-in-cheek
@@ -59,13 +84,18 @@ Another example, this speaker's name is "Γιάννης Παπαδόπουλος
 να δώσει στον εαυτό του την ικανότητα να πετάει αεριωθούμενος κάθε φορά που τρώει
 φασόλια.
 
-Now do one like the example, for a speaker called "{name}". Don't add Markdown headings,
-and add two newlines between paragraphs.
+Now do one like the example, for a speaker called "{name}". The backstory must revolve
+around this theme: "{theme}". Don't add Markdown headings, and add two newlines between
+paragraphs.
 """
     message = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="claude-fable-5-1",
         max_tokens=4000,
-        temperature=1,
+        # Writing a joke bio does not need reasoning, but this model rejects
+        # thinking.type "disabled", so low effort with adaptive thinking is the closest
+        # we can get to switching it off.
+        thinking={"type": "adaptive"},
+        output_config={"effort": "low"},
         system="You are a funny biography writer, writing funny (but not offensive) speaker bios.",
         messages=[
             {
@@ -79,7 +109,9 @@ and add two newlines between paragraphs.
             }
         ],
     )
-    return message.content[0].text
+    # This model thinks by default and refuses to have thinking switched off, so the
+    # first content block is a thinking block, not the bio. Select the text block.
+    return [block for block in message.content if block.type == "text"][0].text
 
 
 class Command(BaseCommand):
@@ -91,8 +123,9 @@ class Command(BaseCommand):
         """
         print("Filling out empty bios...")
         for person in Person.objects.filter(bio=""):
-            print(f"Filling out bio for {person.name}...")
-            bio = get_bio(person.name)
+            theme = random.choice(THEMES)
+            print(f"Filling out bio for {person.name} (theme: {theme})...")
+            bio = get_bio(person.name, theme)
             print(bio)
             person.bio = bio
             person.save()
