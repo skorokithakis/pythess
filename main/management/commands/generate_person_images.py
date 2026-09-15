@@ -160,7 +160,7 @@ def generate_person_image(person: Person, force: bool = False) -> None:
     print(prompt)
 
     response = client.images.generate(
-        model="gpt-image-1-mini",
+        model="gpt-image-2",
         prompt=prompt,
         output_format="jpeg",
         quality="high",
@@ -202,7 +202,7 @@ def generate_person_image(person: Person, force: bool = False) -> None:
 
 
 class Command(BaseCommand):
-    help = "Generate headshot images for people using OpenAI's DALL-E API."
+    help = "Generate headshot images for people using OpenAI's Image Generation API."
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -226,7 +226,7 @@ class Command(BaseCommand):
         Generate headshot images for all people (or a specific person) who don't have images yet.
 
         This command iterates through Person objects, checks for missing images in the
-        static/images/people/ directory, and generates them using OpenAI's DALL-E API.
+        static/images/people/ directory, and generates them using OpenAI's Image Generation API.
         Generated images are resized to 512x512 and saved as optimized JPG files.
         """
         force = options["force"]
