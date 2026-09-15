@@ -177,3 +177,4 @@ pages/
 meetups.json
 .DS_Store
 misc/coding-team/
+.tickets/
